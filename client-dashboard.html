@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Dashboard - UMTI Tech</title>
+    <link rel="icon" type="image/png" href="assets/images/umti-20tech-transparent-20-20only-20logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config = { theme: { extend: { fontFamily: { sans: ['Outfit', 'sans-serif'] } } } }</script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="css/portal-styles.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <style>
+        body {
+            background-color: #f8fafc;
+        }
+    </style>
+</head>
+
+<body class="font-sans">
+    <aside id="sidebar" class="portal-sidebar">
+        <div class="flex items-center gap-3 mb-8 px-2">
+            <div
+                class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center p-1.5">
+                <img src="assets/images/umti-20tech-transparent-20-20only-20logo.png" alt="UMTI Tech"
+                    class="w-full h-full object-contain">
+            </div>
+            <span class="text-xl font-bold text-slate-900">UMTI<span class="text-indigo-600">Tech</span></span>
+        </div>
+        <nav id="dynamicSidebar" class="space-y-2"></nav>
+        <div class="mt-auto pt-8">
+            <button onclick="Auth.logout()" class="portal-nav-link w-full text-red-600 hover:bg-red-50">
+                <i data-lucide="log-out" class="w-5 h-5"></i><span>Logout</span>
+            </button>
+        </div>
+    </aside>
+
+    <header class="portal-header">
+        <button id="mobileMenuBtn" class="lg:hidden p-2 hover:bg-slate-100 rounded-lg">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+        <div class="flex items-center gap-4 ml-auto">
+            <button class="p-2 hover:bg-slate-100 rounded-lg relative">
+                <i data-lucide="bell" class="w-5 h-5"></i>
+                <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+            </button>
+            <div class="flex items-center gap-3">
+                <div
+                    class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white font-bold">
+                    <span id="headerInitial">C</span>
+                </div>
+                <div class="hidden sm:block">
+                    <p class="text-sm font-semibold text-slate-900" id="headerName">Client</p>
+                    <p class="text-xs text-slate-500" id="headerEmail">client@umti.com</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="portal-content">
+        <div class="space-y-8 pb-8">
+            <!-- Welcome Section -->
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div class="animate-slide-in-left">
+                    <h1 class="text-3xl md:text-4xl font-bold text-slate-900 mb-2 tracking-tight">
+                        Client <span class="gradient-text">Dashboard</span>
+                    </h1>
+                    <p class="text-slate-500 font-medium tracking-wide">Track your project investments and financial
+                        overview.</p>
+                </div>
+                <div class="flex gap-3">
+                    <button
+                        class="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 font-bold text-slate-700 hover:bg-slate-50 transition-all text-sm shadow-sm hover:shadow-md">
+                        <i data-lucide="file-text" class="w-4 h-4 text-indigo-500"></i> Statement
+                    </button>
+                    <button
+                        class="flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 font-bold text-white hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition-all text-sm">
+                        <i data-lucide="briefcase" class="w-4 h-4"></i> New Project
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="statsGrid"></div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Projects -->
+                <div class="lg:col-span-2 space-y-6">
+                    <div
+                        class="bg-white/60 backdrop-blur-md rounded-[2.5rem] p-8 pb-6 border border-white/40 shadow-xl relative overflow-hidden animate-slide-in-up animation-delay-300">
+                        <div class="flex justify-between items-center mb-6">
+                            <div>
+                                <h3 class="text-xl font-black text-slate-900 italic">Your Projects</h3>
+                                <p class="text-sm font-bold text-slate-400 uppercase tracking-widest">Active project
+                                    investments</p>
+                            </div>
+                        </div>
+                        <div class="grid gap-4 max-h-[500px] overflow-y-auto custom-scrollbar pr-2" id="projectsList">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Invoices & Total -->
+                <div class="space-y-6">
+                    <div
+                        class="rounded-3xl p-8 bg-gradient-to-br from-indigo-600 to-indigo-900 text-white shadow-xl hover-3d relative overflow-hidden animate-slide-in-up animation-delay-400">
+                        <div class="absolute -right-10 -bottom-10 opacity-20 transform scale-150">
+                            <i data-lucide="dollar-sign" class="w-40 h-40"></i>
+                        </div>
+                        <div class="relative z-10">
+                            <h3 class="text-xl font-bold mb-1">Total Invested</h3>
+                            <p class="text-indigo-200 text-sm mb-6">Lifetime project spend</p>
+
+                            <div class="text-4xl font-bold mb-2" id="totalSpent">$0</div>
+                            <p class="text-indigo-200 text-xs" id="totalProjectsCount">Across 0 projects</p>
+                        </div>
+                    </div>
+
+                    <div
+                        class="bg-white/60 backdrop-blur-md rounded-[2.5rem] p-8 pb-6 border border-white/40 shadow-xl relative overflow-hidden animate-slide-in-up animation-delay-500">
+                        <h3 class="text-xl font-black text-slate-900 italic mb-4">Recent Invoices</h3>
+                        <div class="space-y-2 max-h-[300px] overflow-y-auto custom-scrollbar pr-2" id="invoicesList">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/utils/auth.js"></script>
+    <script src="js/utils/portal-api.js"></script>
+    <script src="js/components/portal-layout.js"></script>
+    <script>
+        Auth.protectPage('client');
+        const currentUser = Auth.getCurrentUser();
+
+        async function loadDashboard() {
+            try {
+                const data = await PortalAPI.getClientDashboard();
+                renderStats(data);
+                renderProjects(data.projects);
+                renderInvoices(data.invoices);
+
+                document.getElementById('totalSpent').textContent = `$${data.total_spent.toLocaleString()}`;
+                const totalProj = (data.active_projects || 0) + (data.projects.filter(p => p.status === 'completed').length || 0);
+                document.getElementById('totalProjectsCount').textContent = `Across ${totalProj} projects`;
+
+                lucide.createIcons();
+            } catch (error) {
+                console.error("Failed to load client dashboard:", error);
+            }
+        }
+
+        function renderStats(data) {
+            const stats = [
+                { title: "Active Projects", value: data.active_projects, icon: 'briefcase', color: 'text-blue-600', bg: 'bg-blue-50' },
+                { title: "Pending Invoices", value: data.pending_invoices, icon: 'file-text', color: 'text-orange-600', bg: 'bg-orange-50' },
+                { title: "Total Spent", value: `$${data.total_spent.toLocaleString()}`, icon: 'dollar-sign', color: 'text-emerald-600', bg: 'bg-emerald-50' },
+                { title: "Project Health", value: "94%", icon: 'trending-up', color: 'text-purple-600', bg: 'bg-purple-50' }
+            ];
+
+            document.getElementById('statsGrid').innerHTML = stats.map((stat, i) => `
+                <div class="animate-slide-in-up animation-delay-${i * 100}">
+                    <div class="glass-card border-none p-5 flex items-center gap-5 hover:shadow-xl transition-all group relative overflow-hidden bg-white/60 min-h-[100px] rounded-2xl">
+                         <div class="w-12 h-12 rounded-2xl ${stat.bg} flex items-center justify-center shrink-0 ${stat.color} shadow-sm group-hover:rotate-12 transition-transform">
+                            <i data-lucide="${stat.icon}" class="w-5 h-5"></i>
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1.5">${stat.title}</p>
+                            <p class="text-xl font-bold text-slate-900 leading-none truncate">${stat.value}</p>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderProjects(projects) {
+            const container = document.getElementById('projectsList');
+            if (projects.length === 0) {
+                container.innerHTML = `<div class="text-center p-8 text-slate-400 italic">No active projects</div>`;
+                return;
+            }
+            container.innerHTML = projects.map((p, i) => `
+                 <div onclick="window.location.href='client-projects.html'" class="p-5 rounded-2xl hover:bg-slate-50 transition-all border border-slate-100/60 bg-white/40 backdrop-blur-sm group cursor-pointer hover:shadow-md hover:border-blue-100 animate-slide-in-up animation-delay-${i * 50}">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-2xl bg-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-110 transition-transform shadow-sm">
+                                <i data-lucide="briefcase" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-slate-900 group-hover:text-blue-600 transition-colors">${p.name}</h3>
+                                <p class="text-sm text-slate-500 font-medium">Budget: $${p.budget.toLocaleString()}</p>
+                            </div>
+                        </div>
+                        <span class="px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider ${p.status === 'active' ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-md shadow-green-200' :
+                    p.status === 'completed' ? 'bg-blue-100 text-blue-700' :
+                        'bg-yellow-100 text-yellow-700'
+                }">
+                            ${p.status}
+                        </span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderInvoices(invoices) {
+            const container = document.getElementById('invoicesList');
+            if (invoices.length === 0) {
+                container.innerHTML = `<div class="text-center p-4 text-slate-400 italic text-sm">No recent invoices</div>`;
+                return;
+            }
+            container.innerHTML = invoices.map((inv, i) => `
+                <div onclick="window.location.href='client-invoices.html'" class="p-3 rounded-xl hover:bg-slate-50 transition-all border border-transparent hover:border-slate-100 group bg-white/50 cursor-pointer animate-slide-in-right animation-delay-${i * 100}">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-green-100 flex items-center justify-center text-green-600 group-hover:bg-green-600 group-hover:text-white transition-colors">
+                                <i data-lucide="dollar-sign" class="w-4 h-4"></i>
+                            </div>
+                            <div>
+                                <p class="font-bold text-slate-900">$${inv.amount.toLocaleString()}</p>
+                                <p class="text-xs text-slate-500">Due: ${inv.due_date}</p>
+                            </div>
+                        </div>
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${inv.status === 'paid' ? 'bg-green-100 text-green-700' :
+                    inv.status === 'pending' ? 'bg-yellow-100 text-yellow-700' :
+                        'bg-red-100 text-red-700'
+                }">
+                            ${inv.status}
+                        </span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        loadDashboard();
+    </script>
+</body>
+
+</html>

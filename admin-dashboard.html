@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - UMTI Tech</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/images/umti-20tech-transparent-20-20only-20logo.png">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Outfit', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="css/portal-styles.css">
+    <link rel="stylesheet" href="css/variables.css">
+
+    <style>
+        body {
+            background-color: #f8fafc;
+        }
+    </style>
+</head>
+
+<body class="font-sans">
+    <!-- Sidebar -->
+    <aside id="sidebar" class="portal-sidebar">
+        <!-- Logo -->
+        <div class="flex items-center gap-3 mb-8 px-2">
+            <div
+                class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center p-1.5">
+                <img src="assets/images/umti-20tech-transparent-20-20only-20logo.png" alt="UMTI Tech"
+                    class="w-full h-full object-contain">
+            </div>
+            <span class="text-xl font-bold text-slate-900">UMTI<span class="text-indigo-600">Tech</span></span>
+        </div>
+
+        <!-- Navigation -->
+        <nav id="dynamicSidebar" class="space-y-2"></nav>
+
+        <!-- Logout Button -->
+        <div class="mt-auto pt-8">
+            <button onclick="handleLogout()" class="portal-nav-link w-full text-red-600 hover:bg-red-50">
+                <i data-lucide="log-out" class="w-5 h-5"></i>
+                <span>Logout</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Header -->
+    <header class="portal-header">
+        <button id="mobileMenuBtn" class="lg:hidden p-2 hover:bg-slate-100 rounded-lg">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+
+        <div class="flex items-center gap-4 ml-auto">
+            <button class="p-2 hover:bg-slate-100 rounded-lg relative">
+                <i data-lucide="bell" class="w-5 h-5"></i>
+                <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+            </button>
+            <div class="flex items-center gap-3">
+                <div
+                    class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white font-bold">
+                    <span id="userInitial">A</span>
+                </div>
+                <div class="hidden sm:block">
+                    <p class="text-sm font-semibold text-slate-900" id="userName">Admin</p>
+                    <p class="text-xs text-slate-500" id="userEmail">admin@umti.com</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="portal-content">
+        <div class="space-y-8 pb-8">
+            <!-- Welcome Section -->
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div class="animate-slide-in-left">
+                    <h1 class="text-3xl md:text-4xl font-bold text-slate-900 mb-2 tracking-tight">
+                        Admin <span class="gradient-text">Stats</span>
+                    </h1>
+                    <p class="text-slate-500 font-medium">Real-time overview of system activity and business results.
+                    </p>
+                </div>
+                <div class="flex gap-3">
+                    <button onclick="refreshData()"
+                        class="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-all shadow-sm font-semibold text-sm">
+                        <i data-lucide="sparkles" class="w-4 h-4 text-indigo-500"></i>
+                        Refresh Data
+                    </button>
+                    <button
+                        class="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition-all font-semibold text-sm">
+                        <i data-lucide="bell" class="w-4 h-4"></i>
+                        Alert Center
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div id="statsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Stats will be inserted here by JavaScript -->
+            </div>
+
+            <!-- Quick Actions & System Health -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Quick Actions -->
+                <div class="lg:col-span-2 three-d-card animate-slide-in-up animation-delay-200">
+                    <h3 class="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
+                        <i data-lucide="sparkles" class="w-5 h-5 text-indigo-500"></i>
+                        Management Shortcuts
+                    </h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4" id="quickActions">
+                        <!-- Actions inserted by JS -->
+                    </div>
+                </div>
+
+                <!-- System Status -->
+                <div
+                    class="rounded-[2.5rem] p-8 bg-gradient-to-br from-indigo-600 to-purple-700 text-white shadow-[0_20px_50px_-10px_rgba(79,70,229,0.3)] relative overflow-hidden flex flex-col justify-center min-h-[220px] animate-scale-in animation-delay-300">
+                    <div class="absolute -right-6 -bottom-6 opacity-10">
+                        <i data-lucide="trending-up" class="w-40 h-40"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-1">System Status</h3>
+                    <p class="text-indigo-100 text-sm mb-6 uppercase tracking-wider font-semibold">Real-time status</p>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center text-sm font-bold">
+                            <span class="text-indigo-100">API Latency</span>
+                            <span class="flex items-center gap-1.5">
+                                <div class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div> 18ms
+                            </span>
+                        </div>
+                        <div class="h-1.5 bg-white/10 rounded-full overflow-hidden">
+                            <div class="h-full bg-white w-[99%] rounded-full shadow-[0_0_10px_rgba(255,255,255,0.5)]">
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center text-sm font-bold">
+                            <span class="text-indigo-100">Uptime</span>
+                            <span>99.9%</span>
+                        </div>
+                        <div class="h-1.5 bg-white/10 rounded-full overflow-hidden">
+                            <div class="h-full bg-white w-[88%] rounded-full shadow-[0_0_10px_rgba(255,255,255,0.5)]">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Project Stats Chart -->
+                <div class="lg:col-span-2 chart-card animate-slide-in-up animation-delay-400">
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">Project Stats</h3>
+                    <p class="text-sm text-slate-500 mb-6">Task distribution</p>
+                    <div class="h-[300px]">
+                        <canvas id="projectChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Invoices Chart -->
+                <div class="chart-card animate-slide-in-up animation-delay-500">
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">Invoices</h3>
+                    <p class="text-sm text-slate-500 mb-6">Payment status overview</p>
+                    <div class="h-[300px] flex items-center justify-center">
+                        <canvas id="invoiceChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Attendance & Recent Activity -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Attendance Card -->
+                <div
+                    class="rounded-[2.5rem] p-8 bg-gradient-to-br from-indigo-600 to-purple-600 text-white shadow-[0_20px_50px_-10px_rgba(79,70,229,0.3)] animate-scale-in animation-delay-400">
+                    <h3 class="text-xl font-bold mb-1">Attendance Today</h3>
+                    <p class="text-indigo-100 text-sm mb-6">Real-time tracking of employee presence</p>
+                    <div class="flex justify-center py-4">
+                        <div id="attendanceProgress"></div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 mt-6" id="attendanceStats">
+                        <!-- Stats inserted by JS -->
+                    </div>
+                </div>
+
+                <!-- Recent Invoices -->
+                <div class="lg:col-span-2 chart-card animate-slide-in-up animation-delay-500">
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">Updates</h3>
+                    <p class="text-sm text-slate-500 mb-6">Latest records</p>
+                    <div id="recentInvoices" class="space-y-3 overflow-y-auto max-h-[320px] custom-scrollbar pr-2">
+                        <!-- Invoices inserted by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Maintenance -->
+            <div class="three-d-card relative overflow-hidden group animate-slide-in-up animation-delay-600">
+                <div
+                    class="absolute top-0 right-0 p-8 opacity-5 group-hover:rotate-45 transition-transform duration-700">
+                    <i data-lucide="trash-2" class="w-32 h-32"></i>
+                </div>
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 relative z-10">
+                    <div>
+                        <h3 class="text-2xl font-bold text-slate-900 mb-2 flex items-center gap-2">
+                            <i data-lucide="sparkles" class="w-5 h-5 text-indigo-500"></i>
+                            System Maintenance
+                        </h3>
+                        <p class="text-slate-500 max-w-lg">
+                            Manage database space and system performance by clearing non-essential historical data.
+                        </p>
+                    </div>
+                    <div class="flex flex-wrap gap-3">
+                        <button onclick="handleCleanup('trash')"
+                            class="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-xl hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-all font-semibold text-sm">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            Empty Trash
+                        </button>
+                        <button onclick="handleCleanup('notifications')"
+                            class="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-xl hover:bg-amber-50 hover:text-amber-600 hover:border-amber-200 transition-all font-semibold text-sm">
+                            <i data-lucide="bell" class="w-4 h-4"></i>
+                            Clear Notices
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="js/utils/auth.js"></script>
+    <script src="js/utils/portal-api.js"></script>
+    <script src="js/components/circular-progress.js"></script>
+    <script src="js/components/portal-layout.js"></script>
+    <script>
+        // Protect page and initialize
+        Auth.protectPage('admin');
+
+        let dashboardData = null;
+        let projectChart = null;
+        let invoiceChart = null;
+
+        // Load dashboard data
+        async function loadDashboard() {
+            try {
+                dashboardData = await fetchDashboardData('admin');
+                renderStats();
+                renderQuickActions();
+                renderCharts();
+                renderAttendance();
+                renderRecentInvoices();
+                lucide.createIcons();
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+            }
+        }
+
+        // Render stat cards
+        function renderStats() {
+            const stats = [
+                {
+                    title: 'Total Clients',
+                    value: dashboardData.total_clients,
+                    change: '+12%',
+                    icon: 'users',
+                    gradient: 'from-blue-500 to-cyan-500'
+                },
+                {
+                    title: 'Total Projects',
+                    value: dashboardData.total_projects,
+                    change: '+5%',
+                    icon: 'book-open',
+                    gradient: 'from-purple-500 to-pink-500'
+                },
+                {
+                    title: 'Active Users',
+                    value: Object.values(dashboardData.users_by_role).reduce((a, b) => a + b, 0),
+                    change: '+8%',
+                    icon: 'trending-up',
+                    gradient: 'from-orange-500 to-red-500'
+                },
+                {
+                    title: 'Attendance Rate',
+                    value: `${dashboardData.attendance_summary.attendance_rate}%`,
+                    change: '+2%',
+                    icon: 'check-circle-2',
+                    gradient: 'from-green-500 to-emerald-500'
+                }
+            ];
+
+            const grid = document.getElementById('statsGrid');
+            grid.innerHTML = stats.map((stat, index) => `
+                <div class="stat-card animate-slide-in-up animation-delay-${index * 100}" style="--gradient-from: var(--color-${stat.gradient.split('-')[1]}); --gradient-to: var(--color-${stat.gradient.split('-')[3]}); --shadow-color: 99, 102, 241;">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="stat-icon-container">
+                            <i data-lucide="${stat.icon}" class="w-6 h-6 text-white"></i>
+                        </div>
+                        <span class="text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded-full">${stat.change}</span>
+                    </div>
+                    <h3 class="text-sm font-medium text-slate-600 mb-1">${stat.title}</h3>
+                    <p class="text-3xl font-bold text-slate-900">${stat.value}</p>
+                </div>
+            `).join('');
+        }
+
+        // Render quick actions
+        function renderQuickActions() {
+            const actions = [
+                { name: 'Users', icon: 'users', color: 'blue', bg: 'bg-blue-50' },
+                { name: 'Courses', icon: 'book-open', color: 'purple', bg: 'bg-purple-50' },
+                { name: 'Projects', icon: 'trending-up', color: 'emerald', bg: 'bg-emerald-50' },
+                { name: 'Invoices', icon: 'dollar-sign', color: 'orange', bg: 'bg-orange-50' }
+            ];
+
+            const container = document.getElementById('quickActions');
+            container.innerHTML = actions.map(action => `
+                <button class="flex flex-col items-center justify-center p-4 rounded-2xl ${action.bg} border border-transparent hover:border-slate-200 transition-all group shadow-sm hover:shadow-md min-h-[100px] hover-lift">
+                    <i data-lucide="${action.icon}" class="w-6 h-6 text-${action.color}-600 mb-2 group-hover:scale-110 transition-transform"></i>
+                    <span class="text-xs font-bold text-slate-700">${action.name}</span>
+                </button>
+            `).join('');
+        }
+
+        // Render charts
+        function renderCharts() {
+            // Project Stats Bar Chart
+            const projectCtx = document.getElementById('projectChart').getContext('2d');
+            projectChart = new Chart(projectCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Active', 'Completed', 'Pending'],
+                    datasets: [{
+                        data: [
+                            dashboardData.projects_by_status.active,
+                            dashboardData.projects_by_status.completed,
+                            dashboardData.projects_by_status.pending
+                        ],
+                        backgroundColor: ['#6366f1', '#10b981', '#f59e0b'],
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+
+            // Invoice Pie Chart
+            const invoiceCtx = document.getElementById('invoiceChart').getContext('2d');
+            invoiceChart = new Chart(invoiceCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Paid', 'Pending', 'Overdue'],
+                    datasets: [{
+                        data: [
+                            dashboardData.invoices_by_status.paid,
+                            dashboardData.invoices_by_status.pending,
+                            dashboardData.invoices_by_status.overdue
+                        ],
+                        backgroundColor: ['#10b981', '#f59e0b', '#ef4444']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        }
+
+        // Render attendance
+        function renderAttendance() {
+            const rate = dashboardData.attendance_summary.attendance_rate;
+            createCircularProgress('attendanceProgress', rate, {
+                size: 160,
+                strokeWidth: 12,
+                color: '#ffffff',
+                trackColor: 'rgba(255,255,255,0.2)'
+            });
+
+            document.getElementById('attendanceStats').innerHTML = `
+                <div class="p-3 bg-white/10 rounded-xl backdrop-blur-sm flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="check-circle-2" class="w-5 h-5 text-green-300"></i>
+                        <span class="font-medium">Present</span>
+                    </div>
+                    <span class="font-bold text-xl">${dashboardData.attendance_summary.present_today}</span>
+                </div>
+                <div class="p-3 bg-white/10 rounded-xl backdrop-blur-sm flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="clock" class="w-5 h-5 text-red-300"></i>
+                        <span class="font-medium">Absent</span>
+                    </div>
+                    <span class="font-bold text-xl">${dashboardData.attendance_summary.absent_today}</span>
+                </div>
+            `;
+        }
+
+        // Render recent invoices
+        function renderRecentInvoices() {
+            const invoices = dashboardData.recent_invoices.map((inv, i) => `
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl bg-white/50 hover:bg-white border border-transparent hover:border-indigo-100 hover:shadow-md transition-all group cursor-pointer gap-3 sm:gap-0 animate-slide-in-right animation-delay-${(i + 1) * 100}">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center group-hover:scale-110 transition-transform flex-shrink-0">
+                            <i data-lucide="dollar-sign" class="w-5 h-5 text-indigo-600"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <p class="font-bold text-slate-900 truncate">${inv.user_name}</p>
+                            <p class="text-xs text-slate-500 font-medium tracking-wide">Due: ${inv.due_date}</p>
+                        </div>
+                    </div>
+                    <div class="text-left sm:text-right pl-14 sm:pl-0 flex items-center sm:block gap-3">
+                        <p class="font-bold text-slate-900">$${inv.amount.toLocaleString()}</p>
+                        <span class="badge badge-${inv.status === 'paid' ? 'success' : inv.status === 'pending' ? 'warning' : 'danger'}">
+                            ${inv.status}
+                        </span>
+                    </div>
+                </div>
+            `).join('');
+
+            document.getElementById('recentInvoices').innerHTML = invoices;
+        }
+
+        // Refresh data
+        async function refreshData() {
+            if (projectChart) projectChart.destroy();
+            if (invoiceChart) invoiceChart.destroy();
+            await loadDashboard();
+        }
+
+        // Handle cleanup
+        function handleCleanup(type) {
+            if (confirm(`Are you sure you want to clean up ${type}? This action cannot be undone.`)) {
+                alert(`System cleaned up ${type} effectively.`);
+            }
+        }
+
+        // Handle logout
+        function handleLogout() {
+            Auth.logout();
+        }
+
+        // Initialize on load
+        loadDashboard();
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>

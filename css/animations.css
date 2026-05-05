@@ -1,0 +1,129 @@
+/* ============================================
+   ANIMATIONS
+   Matches Framer Motion transitions
+   ============================================ */
+
+/* Fade In Up */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Fade In Scale */
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Pulse (Hero Background) */
+@keyframes pulse-scale {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 0.3;
+    }
+
+    50% {
+        transform: scale(1.2);
+        opacity: 0.5;
+    }
+}
+
+/* Marquee (Notice Bar) */
+@keyframes marquee {
+    0% {
+        transform: translateX(0%);
+    }
+
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+/* Reveal Classes */
+.reveal-up {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.reveal-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.reveal-scale {
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+.reveal-scale.visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Stagger Delays */
+.delay-100 {
+    transition-delay: 0.1s;
+}
+
+.delay-200 {
+    transition-delay: 0.2s;
+}
+
+.delay-300 {
+    transition-delay: 0.3s;
+}
+
+.delay-400 {
+    transition-delay: 0.4s;
+}
+
+.delay-500 {
+    transition-delay: 0.5s;
+}
+
+/* Hero Specific Animations from source */
+.animate-hero-pulse-1 {
+    animation: pulse-scale 8s infinite ease-in-out;
+}
+
+.animate-hero-pulse-2 {
+    animation: pulse-scale 10s infinite ease-in-out 1s;
+    /* delay 1s */
+}
+
+/* Image Hover Scale */
+.hover-scale-image {
+    transition: transform 0.5s ease;
+}
+
+.group:hover .hover-scale-image {
+    transform: scale(1.1);
+}
+
+/* Hover Lift */
+.hover-lift-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-xl);
+}

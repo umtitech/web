@@ -1,0 +1,525 @@
+/* Portal Styles - Shared CSS for all dashboard pages */
+
+/* ============================================
+   CUSTOM SCROLLBAR
+   ============================================ */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #6366f1, #a855f7);
+    border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #4f46e5, #9333ea);
+}
+
+/* ============================================
+   GRADIENT TEXT
+   ============================================ */
+.gradient-text {
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ============================================
+   3D CARD EFFECTS
+   ============================================ */
+.three-d-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 2.5rem;
+    padding: 2rem;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    box-shadow: 
+        0 20px 25px -5px rgba(0, 0, 0, 0.1),
+        0 10px 10px -5px rgba(0, 0, 0, 0.04),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.6);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.three-d-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 
+        0 25px 50px -12px rgba(0, 0, 0, 0.25),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.8);
+}
+
+/* ============================================
+   GLASS CARD
+   ============================================ */
+.glass-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+}
+
+/* ============================================
+   PREMIUM STAT CARD
+   ============================================ */
+.stat-card {
+    position: relative;
+    background: white;
+    border-radius: 2rem;
+    padding: 1.75rem;
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+.stat-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+                0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    border-color: rgba(99, 102, 241, 0.3);
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--gradient-from), var(--gradient-to));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.stat-card:hover::before {
+    opacity: 1;
+}
+
+.stat-icon-container {
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--gradient-from), var(--gradient-to));
+    box-shadow: 0 4px 14px 0 rgba(var(--shadow-color), 0.3);
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover .stat-icon-container {
+    transform: scale(1.1) rotate(-5deg);
+    box-shadow: 0 8px 20px 0 rgba(var(--shadow-color), 0.4);
+}
+
+/* ============================================
+   CHART CARD
+   ============================================ */
+.chart-card {
+    background: white;
+    border-radius: 2.5rem;
+    padding: 2rem;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.chart-card:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+                0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes blob {
+    0%, 100% {
+        transform: translate(0, 0) scale(1);
+    }
+    33% {
+        transform: translate(30px, -50px) scale(1.1);
+    }
+    66% {
+        transform: translate(-20px, 20px) scale(0.9);
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+.animate-slide-in-left {
+    animation: slideInLeft 0.5s ease-out forwards;
+}
+
+.animate-slide-in-right {
+    animation: slideInRight 0.5s ease-out forwards;
+}
+
+.animate-slide-in-up {
+    animation: slideInUp 0.5s ease-out forwards;
+}
+
+.animate-scale-in {
+    animation: scaleIn 0.5s ease-out forwards;
+}
+
+.animate-blob {
+    animation: blob 7s infinite;
+}
+
+.animation-delay-100 { animation-delay: 100ms; }
+.animation-delay-200 { animation-delay: 200ms; }
+.animation-delay-300 { animation-delay: 300ms; }
+.animation-delay-400 { animation-delay: 400ms; }
+.animation-delay-500 { animation-delay: 500ms; }
+.animation-delay-2000 { animation-delay: 2s; }
+.animation-delay-4000 { animation-delay: 4s; }
+
+/* ============================================
+   LOADING SPINNER
+   ============================================ */
+.loading-spinner {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(99, 102, 241, 0.1);
+    border-top-color: #6366f1;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+/* ============================================
+   STATUS BADGES
+   ============================================ */
+.badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.badge-success {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.badge-warning {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.badge-danger {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+.badge-info {
+    background-color: #dbeafe;
+    color: #1e40af;
+}
+
+.badge-purple {
+    background-color: #f3e8ff;
+    color: #6b21a8;
+}
+
+/* ============================================
+   PROGRESS BAR
+   ============================================ */
+.progress-bar-container {
+    width: 100%;
+    height: 0.625rem;
+    background-color: #f1f5f9;
+    border-radius: 9999px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #6366f1, #a855f7);
+    border-radius: 9999px;
+    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.3);
+}
+
+/* ============================================
+   PORTAL SIDEBAR
+   ============================================ */
+.portal-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 280px;
+    background: white;
+    border-right: 1px solid #e2e8f0;
+    padding: 2rem 1.5rem;
+    overflow-y: auto;
+    z-index: 40;
+    transition: transform 0.3s ease;
+}
+
+.portal-sidebar.hidden-mobile {
+    transform: translateX(-100%);
+}
+
+.portal-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    color: #64748b;
+    font-weight: 600;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.portal-nav-link:hover {
+    background-color: #f8fafc;
+    color: #6366f1;
+}
+
+.portal-nav-link.active {
+    background: linear-gradient(135deg, #6366f1, #a855f7);
+    color: white;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+/* ============================================
+   PORTAL HEADER
+   ============================================ */
+.portal-header {
+    position: fixed;
+    top: 0;
+    left: 280px;
+    right: 0;
+    height: 70px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #e2e8f0;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 30;
+}
+
+.portal-content {
+    margin-left: 280px;
+    margin-top: 70px;
+    padding: 2rem;
+    min-height: calc(100vh - 70px);
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+@media (max-width: 1024px) {
+    .portal-sidebar {
+        transform: translateX(-100%);
+    }
+    
+    .portal-sidebar.show-mobile {
+        transform: translateX(0);
+    }
+    
+    .portal-header {
+        left: 0;
+    }
+    
+    .portal-content {
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 640px) {
+    .portal-content {
+        padding: 1rem;
+    }
+    
+    .stat-card {
+        padding: 1.25rem;
+    }
+    
+    .chart-card {
+        padding: 1.5rem;
+    }
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+.backdrop-blur {
+    backdrop-filter: blur(20px);
+}
+
+.shadow-glow {
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+}
+
+.shadow-glow-purple {
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+}
+
+.hover-scale {
+    transition: transform 0.3s ease;
+}
+
+.hover-scale:hover {
+    transform: scale(1.05);
+}
+
+.hover-lift {
+    transition: transform 0.3s ease;
+}
+
+.hover-lift:hover {
+    transform: translateY(-4px);
+}
+
+/* ============================================
+   MODALS & DIALOGS
+   ============================================ */
+.dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(8px);
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.dialog-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.dialog-content {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px);
+    width: 90%;
+    max-width: 600px;
+    border-radius: 2rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    transform: scale(0.95) translateY(10px);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    opacity: 0;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.dialog-overlay.active .dialog-content {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+}
+
+/* ============================================
+   CHAT SPECIFIC
+   ============================================ */
+.chat-bubble {
+    position: relative;
+    max-width: 80%;
+    padding: 1rem 1.25rem;
+    border-radius: 1.25rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.chat-bubble.sent {
+    background-color: #0f172a; /* slate-900 */
+    color: white;
+    border-bottom-right-radius: 0;
+    margin-left: auto;
+}
+
+.chat-bubble.received {
+    background-color: white;
+    color: #1e293b; /* slate-800 */
+    border-bottom-left-radius: 0;
+    border: 1px solid #f1f5f9;
+}
+

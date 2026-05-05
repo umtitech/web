@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meeting Management - UMTI Tech</title>
+    <link rel="icon" type="image/png" href="assets/images/umti-20tech-transparent-20-20only-20logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config = { theme: { extend: { fontFamily: { sans: ['Outfit', 'sans-serif'] } } } }</script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="css/portal-styles.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <style>
+        body {
+            background-color: #f8fafc;
+        }
+    </style>
+</head>
+
+<body class="font-sans">
+    <aside id="sidebar" class="portal-sidebar">
+        <div class="flex items-center gap-3 mb-8 px-2">
+            <div
+                class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center p-1.5">
+                <img src="assets/images/umti-20tech-transparent-20-20only-20logo.png" alt="UMTI Tech"
+                    class="w-full h-full object-contain">
+            </div>
+            <span class="text-xl font-bold text-slate-900">UMTI<span class="text-indigo-600">Tech</span></span>
+        </div>
+        <nav id="dynamicSidebar" class="space-y-2"></nav>
+        <div class="mt-auto pt-8">
+            <button onclick="Auth.logout()" class="portal-nav-link w-full text-red-600 hover:bg-red-50">
+                <i data-lucide="log-out" class="w-5 h-5"></i><span>Logout</span>
+            </button>
+        </div>
+    </aside>
+
+    <header class="portal-header">
+        <button id="mobileMenuBtn" class="lg:hidden p-2 hover:bg-slate-100 rounded-lg">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+        <div class="flex items-center gap-4 ml-auto">
+            <button class="p-2 hover:bg-slate-100 rounded-lg relative">
+                <i data-lucide="bell" class="w-5 h-5"></i>
+                <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+            </button>
+            <div class="flex items-center gap-3">
+                <div
+                    class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white font-bold">
+                    <span id="headerInitial">A</span>
+                </div>
+                <div class="hidden sm:block">
+                    <p class="text-sm font-semibold text-slate-900" id="headerName">Admin</p>
+                    <p class="text-xs text-slate-500" id="headerEmail">admin@umti.com</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="portal-content">
+        <div class="space-y-8 pb-10">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div class="animate-slide-in-left">
+                    <h1 class="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight mb-2">
+                        Meeting <span class="gradient-text">Management</span>
+                    </h1>
+                    <p class="text-slate-500 font-medium tracking-wide">Schedule and manage meetings with users.</p>
+                </div>
+
+                <div class="flex gap-4 w-full md:w-auto">
+                    <button onclick="openLink('createModal')"
+                        class="flex-1 md:flex-none bg-slate-900 hover:bg-indigo-600 text-white shadow-xl shadow-slate-200 rounded-2xl px-8 h-12 font-black transition-all hover:scale-[1.02] flex items-center justify-center gap-3">
+                        <i data-lucide="plus" class="w-5 h-5"></i> New Meeting
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6" id="statsGrid"></div>
+
+            <!-- Meetings Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="meetingsGrid"></div>
+        </div>
+    </main>
+
+    <!-- Create Meeting Modal -->
+    <div id="createModal" class="dialog-overlay">
+        <div class="dialog-content rounded-[2.5rem] p-0 overflow-hidden bg-white/95 backdrop-blur-2xl max-w-2xl">
+            <div class="bg-slate-900 p-8 text-white relative">
+                <div class="absolute top-0 right-0 p-8 opacity-10"><i data-lucide="video" class="w-24 h-24"></i></div>
+                <h2 class="text-2xl font-black italic tracking-tight">Schedule Meeting</h2>
+                <p class="text-slate-400 text-sm mt-2 font-medium">Create a new meeting for a client or employee.</p>
+            </div>
+            <form onsubmit="handleCreate(event)" class="p-8 space-y-6">
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Name</label>
+                        <input name="name" required
+                            class="w-full rounded-2xl border-2 border-slate-100 bg-slate-50 h-12 px-4 text-sm font-bold outline-none focus:border-indigo-500 transition-colors">
+                    </div>
+                    <div class="space-y-2">
+                        <label
+                            class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Email</label>
+                        <input name="email" type="email" required
+                            class="w-full rounded-2xl border-2 border-slate-100 bg-slate-50 h-12 px-4 text-sm font-bold outline-none focus:border-indigo-500 transition-colors">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Date</label>
+                        <input name="meeting_date" type="date" required
+                            class="w-full rounded-2xl border-2 border-slate-100 bg-slate-50 h-12 px-4 text-sm font-bold outline-none focus:border-indigo-500 transition-colors">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Time</label>
+                        <input name="meeting_time" type="time" required
+                            class="w-full rounded-2xl border-2 border-slate-100 bg-slate-50 h-12 px-4 text-sm font-bold outline-none focus:border-indigo-500 transition-colors">
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Message</label>
+                    <textarea name="message" required
+                        class="w-full rounded-2xl border-2 border-slate-100 bg-slate-50 min-h-[100px] p-4 text-sm font-medium outline-none focus:border-indigo-500 transition-colors"></textarea>
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Meeting Link
+                        (Optional)</label>
+                    <input name="meeting_link" placeholder="https://meet.google.com/..."
+                        class="w-full rounded-2xl border-2 border-slate-100 bg-slate-50 h-12 px-4 text-sm font-bold outline-none focus:border-indigo-500 transition-colors">
+                </div>
+                <div class="flex gap-4 pt-4">
+                    <button type="button" onclick="closeLink('createModal')"
+                        class="px-6 font-bold text-slate-500 hover:bg-slate-50 rounded-2xl">Cancel</button>
+                    <button type="submit"
+                        class="flex-1 bg-indigo-600 hover:bg-slate-900 text-white rounded-2xl h-14 font-black shadow-xl shadow-indigo-100 transition-all">Schedule
+                        Meeting</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/utils/auth.js"></script>
+    <script src="js/utils/portal-api.js"></script>
+    <script src="js/components/portal-layout.js"></script>
+    <script>
+        let allMeetings = [];
+
+        async function loadMeetings() {
+            try {
+                // Use admin endpoint which we just added
+                const token = localStorage.getItem('umti_token');
+                const res = await fetch('/api/admin/meetings', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (!res.ok) throw new Error("Failed to fetch meetings");
+                const data = await res.json();
+                allMeetings = data;
+                renderMeetings(allMeetings);
+                renderStats();
+                lucide.createIcons();
+            } catch (error) {
+                console.error("Failed to load meetings:", error);
+                // Fallback to common if admin fails? No, intent is admin only.
+            }
+        }
+
+        function renderStats() {
+            const pendingCount = allMeetings.filter(m => m.status === 'pending').length;
+            const stats = [
+                { label: "Total Meetings", value: allMeetings.length, icon: 'video', color: "text-indigo-600", bg: "bg-indigo-50" },
+                { label: "Pending", value: pendingCount, icon: 'clock', color: "text-amber-600", bg: "bg-amber-50" },
+                { label: "Confirmed", value: allMeetings.filter(m => m.status === 'confirmed').length, icon: 'check-circle', color: "text-emerald-600", bg: "bg-emerald-50" },
+                { label: "Today", value: allMeetings.filter(m => isToday(m.meeting_date)).length, icon: 'calendar', color: "text-purple-600", bg: "bg-purple-50" }
+            ];
+            document.getElementById('statsGrid').innerHTML = stats.map((stat, i) => `
+                <div class="animate-slide-in-up animation-delay-${i * 100}">
+                     <div class="glass-card border-none p-5 flex items-center gap-5 hover:shadow-xl transition-all group relative overflow-hidden bg-white/60 min-h-[100px] rounded-2xl">
+                         <div class="w-12 h-12 rounded-2xl ${stat.bg} flex items-center justify-center shrink-0 ${stat.color} shadow-sm group-hover:rotate-12 transition-transform">
+                            <i data-lucide="${stat.icon}" class="w-5 h-5"></i>
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1.5">${stat.label}</p>
+                            <p class="text-xl font-bold text-slate-900 leading-none truncate">${stat.value}</p>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function isToday(dateStr) {
+            const today = new Date().toISOString().split('T')[0];
+            return dateStr === today;
+        }
+
+        function renderMeetings(meetings) {
+            const grid = document.getElementById('meetingsGrid');
+            if (meetings.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center p-12 text-slate-400 italic">No meetings scheduled.</div>`;
+                return;
+            }
+
+            grid.innerHTML = meetings.map((m, i) => `
+                <div class="animate-slide-in-up animation-delay-${i * 50}">
+                    <div class="glass-card border-white/60 h-full hover:shadow-2xl transition-all duration-500 overflow-hidden flex flex-col group relative rounded-[2.5rem] bg-white/70">
+                         <div class="absolute top-0 right-0 p-6 z-20 flex gap-2">
+                            <button onclick="handleDelete(${m.id})" class="h-8 w-8 text-slate-300 hover:bg-red-50 hover:text-red-500 bg-white/80 backdrop-blur-md rounded-lg transition-all shadow-sm flex items-center justify-center">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                        <div class="p-6 pb-4 relative">
+                             <div class="w-14 h-14 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center shadow-md mb-6 group-hover:rotate-12 transition-transform">
+                                <i data-lucide="video" class="w-7 h-7"></i>
+                            </div>
+                            <span class="inline-block mb-2 px-3 py-0.5 rounded-lg uppercase text-[8px] font-black tracking-widest shadow-lg text-white ${getStatusColor(m.status)}">
+                                ${m.status}
+                            </span>
+                            <h3 class="text-xl font-black text-slate-900 leading-tight line-clamp-1">${m.name}</h3>
+                            <p class="text-xs font-bold text-slate-500 mb-4">${m.email}</p>
+                            
+                            <div class="flex items-center gap-4 text-xs font-black text-slate-700">
+                                <span class="flex items-center gap-1.5"><i data-lucide="calendar" class="w-3 h-3 text-slate-400"></i> ${m.meeting_date}</span>
+                                <span class="flex items-center gap-1.5"><i data-lucide="clock" class="w-3 h-3 text-slate-400"></i> ${m.meeting_time}</span>
+                            </div>
+                        </div>
+                        <div class="flex-1 px-6 pb-6 relative z-10">
+                            <p class="text-sm font-medium text-slate-500 line-clamp-2 leading-relaxed italic bg-slate-50 p-3 rounded-xl border border-slate-100">"${m.message}"</p>
+                        </div>
+                        <div class="px-6 pb-6 pt-0 space-y-3">
+                            ${m.status === 'pending' ? `
+                                <div class="flex gap-2">
+                                    <button onclick="updateStatus(${m.id}, 'confirmed')" class="flex-1 h-10 rounded-xl bg-emerald-50 text-emerald-600 hover:bg-emerald-100 font-bold text-xs uppercase tracking-widest transition-all">Confirm</button>
+                                    <button onclick="updateStatus(${m.id}, 'cancelled')" class="flex-1 h-10 rounded-xl bg-red-50 text-red-600 hover:bg-red-100 font-bold text-xs uppercase tracking-widest transition-all">Cancel</button>
+                                </div>
+                            ` : ''}
+                            ${m.meeting_link ? `
+                                <a href="${m.meeting_link}" target="_blank" class="flex items-center justify-center w-full h-10 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 font-bold text-xs uppercase tracking-widest transition-all">
+                                    Join Meeting
+                                </a>
+                            ` : ''}
+                             ${m.status === 'confirmed' && !m.meeting_link ? `
+                                <button onclick="addLink(${m.id})" class="w-full h-10 rounded-xl border border-dashed border-indigo-300 text-indigo-500 hover:bg-indigo-50 font-bold text-xs uppercase tracking-widest transition-all">
+                                    + Add Link
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getStatusColor(status) {
+            if (status === 'confirmed') return 'bg-emerald-500';
+            if (status === 'cancelled') return 'bg-red-500';
+            return 'bg-amber-500';
+        }
+
+        // Modals
+        function openLink(id) { document.getElementById(id).classList.add('active'); }
+        function closeLink(id) { document.getElementById(id).classList.remove('active'); }
+
+        async function handleCreate(e) {
+            e.preventDefault();
+            const fd = new FormData(e.target);
+            const data = Object.fromEntries(fd.entries());
+
+            try {
+                // Use admin endpoint
+                const token = localStorage.getItem('umti_token');
+                const res = await fetch('/api/admin/meetings', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (!res.ok) throw new Error("Failed to create meeting");
+
+                await loadMeetings();
+                closeLink('createModal');
+                e.target.reset();
+            } catch (error) {
+                alert(error.message);
+            }
+        }
+
+        async function updateStatus(id, status) {
+            try {
+                const token = localStorage.getItem('umti_token');
+                await fetch(`/api/admin/meetings/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify({ status })
+                });
+                await loadMeetings();
+            } catch (e) { console.error(e); }
+        }
+
+        async function addLink(id) {
+            const link = prompt("Enter meeting link:");
+            if (!link) return;
+            try {
+                const token = localStorage.getItem('umti_token');
+                await fetch(`/api/admin/meetings/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify({ meeting_link: link })
+                });
+                await loadMeetings();
+            } catch (e) { console.error(e); }
+        }
+
+        async function handleDelete(id) {
+            if (!confirm("Delete this meeting?")) return;
+            try {
+                const token = localStorage.getItem('umti_token');
+                await fetch(`/api/admin/meetings/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                await loadMeetings();
+            } catch (e) { console.error(e); }
+        }
+
+        loadMeetings();
+    </script>
+</body>
+
+</html>

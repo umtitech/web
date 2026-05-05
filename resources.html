@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Resources - UMTI Tech</title>
+    <link rel="icon" type="image/png" href="assets/images/umti-20tech-transparent-20-20only-20logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config = { theme: { extend: { fontFamily: { sans: ['Outfit', 'sans-serif'] } } } }</script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="css/portal-styles.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <style>
+        body {
+            background-color: #f8fafc;
+        }
+    </style>
+</head>
+
+<body class="font-sans">
+    <aside id="sidebar" class="portal-sidebar">
+        <div class="flex items-center gap-3 mb-8 px-2">
+            <div
+                class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center p-1.5">
+                <img src="assets/images/umti-20tech-transparent-20-20only-20logo.png" alt="UMTI Tech"
+                    class="w-full h-full object-contain">
+            </div>
+            <span class="text-xl font-bold text-slate-900">UMTI<span class="text-indigo-600">Tech</span></span>
+        </div>
+        <nav id="dynamicSidebar" class="space-y-2"></nav>
+        <div class="mt-auto pt-8">
+            <button onclick="Auth.logout()" class="portal-nav-link w-full text-red-600 hover:bg-red-50">
+                <i data-lucide="log-out" class="w-5 h-5"></i><span>Logout</span>
+            </button>
+        </div>
+    </aside>
+
+    <header class="portal-header">
+        <button id="mobileMenuBtn" class="lg:hidden p-2 hover:bg-slate-100 rounded-lg">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+        <div class="flex items-center gap-4 ml-auto">
+            <button class="p-2 hover:bg-slate-100 rounded-lg relative">
+                <i data-lucide="bell" class="w-5 h-5"></i>
+                <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+            </button>
+            <div class="flex items-center gap-3">
+                <div
+                    class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white font-bold">
+                    <span id="headerInitial">S</span>
+                </div>
+                <div class="hidden sm:block">
+                    <p class="text-sm font-semibold text-slate-900" id="headerName">Student</p>
+                    <p class="text-xs text-slate-500" id="headerEmail">student@umti.com</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="portal-content">
+        <div class="space-y-8 pb-10">
+            <!-- Welcome Section -->
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div class="animate-slide-in-left">
+                    <h1 class="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight mb-2">
+                        Learning <span class="gradient-text">Resources</span>
+                    </h1>
+                    <p class="text-slate-500 font-medium tracking-wide">Access course materials, documents, and shared
+                        assets.</p>
+                </div>
+
+                <div class="flex gap-4">
+                    <button onclick="loadResources()"
+                        class="rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 font-black text-[10px] uppercase tracking-widest px-6 h-12 shadow-sm transition-all flex items-center gap-2">
+                        Sync Library <i data-lucide="refresh-cw" class="w-4 h-4 text-indigo-500"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Metrics -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6" id="statsGrid"></div>
+
+            <!-- Search -->
+            <div
+                class="bg-white/60 backdrop-blur-md p-4 rounded-3xl shadow-sm border border-slate-100/50 flex items-center gap-4 group hover:shadow-lg transition-all duration-500 animate-slide-in-up">
+                <div
+                    class="w-10 h-10 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-500 group-focus-within:bg-indigo-600 group-focus-within:text-white transition-all">
+                    <i data-lucide="search" class="w-5 h-5"></i>
+                </div>
+                <input type="text" id="searchInput" oninput="filterResources()"
+                    placeholder="Search by title, category, or course..."
+                    class="w-full border-none bg-transparent focus:outline-none px-0 h-auto text-lg font-medium placeholder:text-slate-400">
+            </div>
+
+            <!-- Resources Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="resourcesGrid"></div>
+        </div>
+    </main>
+
+    <script src="js/utils/auth.js"></script>
+    <script src="js/utils/portal-api.js"></script>
+    <script src="js/components/portal-layout.js"></script>
+    <script>
+        Auth.protectPage('student');
+        const currentUser = Auth.getCurrentUser();
+
+
+        let allResources = [];
+
+        async function loadResources() {
+            try {
+                allResources = await PortalAPI.getResources();
+                renderStats();
+                renderResources(allResources);
+                lucide.createIcons();
+            } catch (error) {
+                console.error("Failed to load resources:", error);
+            }
+        }
+
+        function renderStats() {
+            const stats = [
+                { label: "Available Items", value: allResources.length, icon: 'library', color: "text-indigo-600", bg: "bg-indigo-50" },
+                { label: "Access Level", value: "Student", icon: 'shield-check', color: "text-emerald-600", bg: "bg-emerald-50" },
+                { label: "Library Status", value: "Online", icon: 'zap', color: "text-purple-600", bg: "bg-purple-50" },
+                { label: "Last Sync", value: "Just Now", icon: 'target', color: "text-amber-600", bg: "bg-amber-50" }
+            ];
+
+            document.getElementById('statsGrid').innerHTML = stats.map((stat, i) => `
+                <div class="animate-slide-in-up animation-delay-${i * 100}">
+                    <div class="glass-card border-none p-5 flex items-center gap-5 hover:shadow-xl transition-all group relative overflow-hidden bg-white/60 rounded-2xl">
+                         <div class="w-12 h-12 rounded-2xl ${stat.bg} flex items-center justify-center shrink-0 ${stat.color} shadow-sm group-hover:rotate-12 transition-transform">
+                            <i data-lucide="${stat.icon}" class="w-5 h-5"></i>
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1.5">${stat.label}</p>
+                            <p class="text-xl font-bold text-slate-900 leading-none truncate">${stat.value}</p>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderResources(resources) {
+            const grid = document.getElementById('resourcesGrid');
+            if (resources.length === 0) {
+                grid.innerHTML = `<div class="col-span-full py-24 text-center glass-card border-none rounded-[2.5rem]">
+                    <div class="w-20 h-20 mx-auto bg-slate-50 rounded-full flex items-center justify-center mb-6">
+                        <i data-lucide="folder-open" class="w-10 h-10 text-slate-200"></i>
+                    </div>
+                    <h3 class="text-xl font-black text-slate-900">Library Empty</h3>
+                    <p class="text-slate-400 font-medium italic">No resources match your search.</p>
+                </div>`;
+                return;
+            }
+
+            grid.innerHTML = resources.map((res, i) => `
+                <div class="animate-slide-in-up animation-delay-${i * 50}">
+                     <div class="glass-card border-white/60 h-full hover:shadow-2xl transition-all duration-500 overflow-hidden flex flex-col group relative rounded-[2.5rem] bg-white/70">
+                         <div class="p-6 pb-4">
+                            <div class="flex items-center gap-4 mb-4">
+                                <div class="w-14 h-14 rounded-2xl bg-slate-900 text-white flex items-center justify-center shadow-xl group-hover:rotate-12 transition-transform">
+                                    <i data-lucide="file-text" class="w-7 h-7"></i>
+                                </div>
+                                <div class="min-w-0">
+                                    <div class="flex gap-2 mb-2">
+                                        <span class="bg-indigo-600 text-white border-transparent px-2 py-0.5 rounded-lg uppercase text-[8px] font-black tracking-widest shadow-lg">
+                                            ${res.category}
+                                        </span>
+                                        ${res.course_name && res.course_name !== "General" ? `
+                                            <span class="bg-slate-100 text-slate-600 border-transparent px-2 py-0.5 rounded-lg uppercase text-[8px] font-black tracking-widest">
+                                                ${res.course_name}
+                                            </span>
+                                        ` : ''}
+                                    </div>
+                                    <h3 class="text-lg font-black text-slate-900 italic line-clamp-1 group-hover:text-indigo-600 transition-colors">"${res.title}"</h3>
+                                </div>
+                            </div>
+                         </div>
+
+                         <div class="flex-1 px-6 pb-6 relative z-10 flex flex-col gap-4">
+                            <p class="text-sm font-medium text-slate-500 italic line-clamp-3 leading-relaxed">
+                                "${res.description || "No description provided."}"
+                            </p>
+                            <div class="mt-auto space-y-4">
+                                <div class="flex flex-col gap-2 bg-slate-50/50 p-3 rounded-xl border border-slate-100/50">
+                                    <div class="flex justify-between items-center text-[8px] font-black text-slate-400 uppercase tracking-widest px-1">
+                                        <span>Source</span>
+                                        <span>Posted</span>
+                                    </div>
+                                    <div class="flex justify-between items-center px-1">
+                                        <span class="text-[10px] font-black text-slate-700 italic flex items-center gap-1">
+                                            <i data-lucide="circuit-board" class="w-3 h-3 text-indigo-400"></i>
+                                            ${res.creator_name}
+                                        </span>
+                                        <span class="text-[10px] font-bold text-slate-500">${(new Date(res.created_at)).toLocaleDateString()}</span>
+                                    </div>
+                                </div>
+                                <button onclick="alert('Mock Download: ${res.title}')" class="w-full h-12 rounded-2xl bg-slate-900 hover:bg-indigo-600 text-white font-black text-[10px] uppercase tracking-widest transition-all shadow-xl shadow-slate-200 flex items-center justify-center gap-2">
+                                    Download Material <i data-lucide="download" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                         </div>
+                     </div>
+                </div>
+            `).join('');
+        }
+
+        function filterResources() {
+            const term = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = allResources.filter(r =>
+                r.title.toLowerCase().includes(term) ||
+                r.category.toLowerCase().includes(term) ||
+                (r.course_name && r.course_name.toLowerCase().includes(term))
+            );
+            renderResources(filtered);
+            lucide.createIcons();
+        }
+
+        loadResources();
+    </script>
+</body>
+
+</html>

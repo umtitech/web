@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Training - Intern Portal</title>
+    <link rel="icon" type="image/png" href="assets/images/umti-20tech-transparent-20-20only-20logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config = { theme: { extend: { fontFamily: { sans: ['Outfit', 'sans-serif'] } } } }</script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="css/portal-styles.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <style>
+        body {
+            background-color: #f8fafc;
+        }
+    </style>
+</head>
+
+<body class="font-sans">
+    <!-- Sidebar -->
+    <aside id="sidebar" class="portal-sidebar">
+        <div class="flex items-center gap-3 mb-8 px-2">
+            <div
+                class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center p-1.5">
+                <img src="assets/images/umti-20tech-transparent-20-20only-20logo.png" alt="UMTI Tech"
+                    class="w-full h-full object-contain">
+            </div>
+            <span class="text-xl font-bold text-slate-900">UMTI<span class="text-indigo-600">Tech</span></span>
+        </div>
+        <nav id="dynamicSidebar" class="space-y-2"></nav>
+
+        <div class="mt-auto pt-8">
+            <button onclick="Auth.logout()" class="portal-nav-link w-full text-red-600 hover:bg-red-50">
+                <i data-lucide="log-out" class="w-5 h-5"></i><span>Logout</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Header -->
+    <header class="portal-header">
+        <button id="mobileMenuBtn" class="lg:hidden p-2 hover:bg-slate-100 rounded-lg">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+        <div class="flex items-center gap-4 ml-auto">
+            <button class="p-2 hover:bg-slate-100 rounded-lg relative">
+                <i data-lucide="bell" class="w-5 h-5"></i>
+                <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+            </button>
+            <div class="flex items-center gap-3">
+                <div
+                    class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white font-bold">
+                    <span id="headerInitial">I</span>
+                </div>
+                <div class="hidden sm:block">
+                    <p class="text-sm font-semibold text-slate-900" id="headerName">Intern</p>
+                    <p class="text-xs text-slate-500" id="headerEmail">intern@umti.com</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="portal-content">
+        <div class="space-y-8 pb-8">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div class="animate-slide-in-left">
+                    <h1 class="text-3xl md:text-4xl font-bold text-slate-900 mb-2 tracking-tight">
+                        Training <span class="gradient-text">Modules</span>
+                    </h1>
+                    <p class="text-slate-500 font-medium md:text-lg">Develop your skills with curated courses.</p>
+                </div>
+            </div>
+
+            <!-- Courses Grid -->
+            <div id="trainingGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Loaded via JS -->
+            </div>
+        </div>
+    </main>
+
+    <script src="js/utils/auth.js"></script>
+    <script src="js/utils/portal-api.js"></script>
+    <script src="js/components/portal-layout.js"></script>
+    <script>
+        Auth.protectPage('intern');
+        const currentUser = Auth.getCurrentUser();
+
+
+        async function loadTraining() {
+            try {
+                const courses = await PortalAPI.getInternTraining();
+                const grid = document.getElementById('trainingGrid');
+
+                if (courses.length === 0) {
+                    grid.innerHTML = `<div class="col-span-full text-center p-8 text-slate-400 font-medium italic">No training modules assigned yet.</div>`;
+                    return;
+                }
+
+                grid.innerHTML = courses.map((c, i) => `
+                <div class="bg-white rounded-[2rem] p-6 shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 border border-slate-100 group animate-slide-in-up animation-delay-${i * 100}">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="w-14 h-14 rounded-2xl bg-indigo-50 group-hover:bg-gradient-to-br from-indigo-500 to-purple-600 transition-all duration-500 flex items-center justify-center text-indigo-600 group-hover:text-white shadow-inner group-hover:shadow-lg">
+                            <i data-lucide="book-open" class="w-7 h-7"></i>
+                        </div>
+                        <div class="text-right">
+                             <div class="text-2xl font-black text-slate-900">${c.progress}%</div>
+                            <div class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Completed</div>
+                        </div>
+                    </div>
+
+                     <h3 class="text-xl font-bold text-slate-900 mb-2 leading-tight">${c.name}</h3>
+                     <p class="text-sm font-medium text-slate-500 mb-6">Instructor: <span class="text-indigo-600">${c.instructor}</span></p>
+
+                    <div class="space-y-4">
+                        <div>
+                             <div class="flex justify-between text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
+                                <span>Progress</span>
+                                <span>${c.completed_modules}/${c.modules} Modules</span>
+                            </div>
+                            <div class="h-2.5 bg-slate-100 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all duration-1000 shadow-[0_0_10px_rgba(99,102,241,0.3)]" style="width: ${c.progress}%"></div>
+                            </div>
+                        </div>
+
+                        <button class="w-full py-3 rounded-xl bg-slate-900 text-white font-bold text-sm hover:bg-indigo-600 transition-all shadow-lg flex items-center justify-center gap-2">
+                            ${c.progress === 100 ? 'Review Course' : 'Continue Learning'} <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+                lucide.createIcons();
+            } catch (error) {
+                console.error("Failed to load intern training:", error);
+            }
+        }
+
+        loadTraining();
+    </script>
+</body>
+
+</html>

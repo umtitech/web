@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance - Student Portal</title>
+    <link rel="icon" type="image/png" href="assets/images/umti-20tech-transparent-20-20only-20logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config = { theme: { extend: { fontFamily: { sans: ['Outfit', 'sans-serif'] } } } }</script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="css/portal-styles.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <style>
+        body {
+            background-color: #f8fafc;
+        }
+    </style>
+</head>
+
+<body class="font-sans">
+    <aside id="sidebar" class="portal-sidebar">
+        <div class="flex items-center gap-3 mb-8 px-2">
+            <div
+                class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center p-1.5">
+                <img src="assets/images/umti-20tech-transparent-20-20only-20logo.png" alt="UMTI Tech"
+                    class="w-full h-full object-contain">
+            </div>
+            <span class="text-xl font-bold text-slate-900">UMTI<span class="text-indigo-600">Tech</span></span>
+        </div>
+        <nav id="dynamicSidebar" class="space-y-2"></nav>
+        <div class="mt-auto pt-8">
+            <button onclick="Auth.logout()" class="portal-nav-link w-full text-red-600 hover:bg-red-50">
+                <i data-lucide="log-out" class="w-5 h-5"></i><span>Logout</span>
+            </button>
+        </div>
+    </aside>
+
+    <header class="portal-header">
+        <button id="mobileMenuBtn" class="lg:hidden p-2 hover:bg-slate-100 rounded-lg">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+        <div class="flex items-center gap-4 ml-auto">
+            <button class="p-2 hover:bg-slate-100 rounded-lg relative">
+                <i data-lucide="bell" class="w-5 h-5"></i>
+                <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+            </button>
+            <div class="flex items-center gap-3">
+                <div
+                    class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white font-bold">
+                    <span id="headerInitial">S</span>
+                </div>
+                <div class="hidden sm:block">
+                    <p class="text-sm font-semibold text-slate-900" id="headerName">Student</p>
+                    <p class="text-xs text-slate-500" id="headerEmail">student@umti.com</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="portal-content">
+        <div class="space-y-8 pb-8">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div class="animate-slide-in-left">
+                    <h1 class="text-3xl md:text-4xl font-bold text-slate-900 mb-2 tracking-tight">
+                        My <span class="gradient-text">Attendance</span>
+                    </h1>
+                    <p class="text-slate-500 font-medium md:text-lg">Track your daily presence and records.</p>
+                </div>
+            </div>
+
+            <!-- Overview Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-2" id="attendanceStats">
+                <!-- Loaded via JS -->
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Circular Chart -->
+                <div
+                    class="rounded-[2.5rem] p-8 bg-gradient-to-br from-indigo-600 to-purple-600 text-white shadow-xl flex flex-col items-center justify-center animate-scale-in">
+                    <h3 class="text-xl font-bold mb-6">Overall Attendance</h3>
+                    <div class="relative w-48 h-48 flex items-center justify-center mb-4">
+                        <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="40" stroke="rgba(255,255,255,0.2)" stroke-width="8"
+                                fill="transparent" />
+                            <circle id="attendanceCircle" cx="50" cy="50" r="40" stroke="white" stroke-width="8"
+                                fill="transparent" stroke-dasharray="251.2" stroke-dashoffset="251.2"
+                                stroke-linecap="round" />
+                        </svg>
+                        <span class="absolute text-4xl font-black" id="attendancePercentage">0%</span>
+                    </div>
+                    <p class="text-indigo-100 font-medium">Excellent record!</p>
+                </div>
+
+                <!-- History List -->
+                <div
+                    class="lg:col-span-2 bg-white rounded-[2.5rem] p-8 border border-slate-100 shadow-xl overflow-hidden animate-slide-in-up animation-delay-200">
+                    <h3 class="text-xl font-black text-slate-900 italic mb-6">Recent History</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr
+                                    class="bg-slate-50 border-b border-slate-100 text-xs font-black uppercase tracking-widest text-slate-400">
+                                    <th class="p-4 rounded-tl-xl">Date</th>
+                                    <th class="p-4">Status</th>
+                                    <th class="p-4 rounded-tr-xl">Check-in Time</th>
+                                </tr>
+                            </thead>
+                            <tbody id="attendanceHistory" class="text-sm font-medium text-slate-600">
+                                <!-- Loaded via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/utils/auth.js"></script>
+    <script src="js/utils/portal-api.js"></script>
+    <script src="js/components/portal-layout.js"></script>
+    <script>
+        Auth.protectPage('student');
+        const currentUser = Auth.getCurrentUser();
+
+
+        async function loadAttendance() {
+            try {
+                const data = await PortalAPI.getStudentAttendance();
+
+                // Render Stats
+                const stats = [
+                    { title: "Total Classes", value: data.present_days + data.absent_days + data.late_days, icon: 'book', color: 'text-blue-600', bg: 'bg-blue-50' },
+                    { title: "Present", value: data.present_days, icon: 'check-circle', color: 'text-green-600', bg: 'bg-green-50' },
+                    { title: "Late", value: data.late_days, icon: 'clock', color: 'text-amber-600', bg: 'bg-amber-50' },
+                    { title: "Absent", value: data.absent_days, icon: 'x-circle', color: 'text-red-600', bg: 'bg-red-50' }
+                ];
+
+                document.getElementById('attendanceStats').innerHTML = stats.map((s, i) => `
+                <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex items-center gap-4 animate-slide-in-up animation-delay-${i * 100}">
+                    <div class="w-12 h-12 rounded-xl ${s.bg} flex items-center justify-center ${s.color}">
+                        <i data-lucide="${s.icon}" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">${s.title}</p>
+                        <p class="text-2xl font-bold text-slate-900">${s.value}</p>
+                    </div>
+                </div>
+            `).join('');
+
+
+                // Update Circle
+                const percentage = data.overall_attendance;
+                const circle = document.getElementById('attendanceCircle');
+                const circumference = 2 * Math.PI * 40;
+                const offset = circumference - (percentage / 100) * circumference;
+                circle.style.strokeDashoffset = offset;
+                document.getElementById('attendancePercentage').textContent = `${percentage}%`;
+
+                // Render History
+                document.getElementById('attendanceHistory').innerHTML = data.history.map(record => `
+                <tr class="hover:bg-slate-50 transition-colors border-b border-slate-50 last:border-none">
+                    <td class="p-4 font-bold text-slate-900">${new Date(record.date).toLocaleDateString()}</td>
+                    <td class="p-4">
+                        <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${record.status === 'present' ? 'bg-green-100 text-green-700' :
+                        record.status === 'late' ? 'bg-amber-100 text-amber-700' :
+                            'bg-red-100 text-red-700'
+                    }">
+                            ${record.status}
+                        </span>
+                    </td>
+                    <td class="p-4 font-mono text-slate-500 font-bold">${record.check_in}</td>
+                </tr>
+            `).join('');
+
+                lucide.createIcons();
+            } catch (error) {
+                console.error("Failed to load attendance:", error);
+            }
+        }
+        loadAttendance();
+    </script>
+</body>
+
+</html>

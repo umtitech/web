@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tasks - Intern Portal</title>
+    <link rel="icon" type="image/png" href="assets/images/umti-20tech-transparent-20-20only-20logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config = { theme: { extend: { fontFamily: { sans: ['Outfit', 'sans-serif'] } } } }</script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="css/portal-styles.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <style>
+        body {
+            background-color: #f8fafc;
+        }
+    </style>
+</head>
+
+<body class="font-sans">
+    <aside id="sidebar" class="portal-sidebar">
+        <div class="flex items-center gap-3 mb-8 px-2">
+            <div
+                class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center p-1.5">
+                <img src="assets/images/umti-20tech-transparent-20-20only-20logo.png" alt="UMTI Tech"
+                    class="w-full h-full object-contain">
+            </div>
+            <span class="text-xl font-bold text-slate-900">UMTI<span class="text-indigo-600">Tech</span></span>
+        </div>
+        <nav id="dynamicSidebar" class="space-y-2"></nav>
+        <div class="mt-auto pt-8">
+            <button onclick="Auth.logout()" class="portal-nav-link w-full text-red-600 hover:bg-red-50">
+                <i data-lucide="log-out" class="w-5 h-5"></i><span>Logout</span>
+            </button>
+        </div>
+    </aside>
+
+    <header class="portal-header">
+        <button id="mobileMenuBtn" class="lg:hidden p-2 hover:bg-slate-100 rounded-lg">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+        <div class="flex items-center gap-4 ml-auto">
+            <button class="p-2 hover:bg-slate-100 rounded-lg relative">
+                <i data-lucide="bell" class="w-5 h-5"></i>
+                <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+            </button>
+            <div class="flex items-center gap-3">
+                <div
+                    class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white font-bold">
+                    <span id="headerInitial">I</span>
+                </div>
+                <div class="hidden sm:block">
+                    <p class="text-sm font-semibold text-slate-900" id="headerName">Intern</p>
+                    <p class="text-xs text-slate-500" id="headerEmail">intern@umti.com</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="portal-content">
+        <div class="space-y-8 pb-8">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div class="animate-slide-in-left">
+                    <h1 class="text-3xl md:text-4xl font-bold text-slate-900 mb-2 tracking-tight">
+                        My <span class="gradient-text">Assignments</span>
+                    </h1>
+                    <p class="text-slate-500 font-medium md:text-lg">Daily tasks and deadlines.</p>
+                </div>
+            </div>
+
+            <div id="tasksGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </div>
+    </main>
+
+    <script src="js/utils/auth.js"></script>
+    <script src="js/utils/portal-api.js"></script>
+    <script src="js/components/portal-layout.js"></script>
+    <script>
+        Auth.protectPage('intern');
+        const currentUser = Auth.getCurrentUser();
+
+
+        async function loadTasks() {
+            try {
+                const tasks = await PortalAPI.getInternTasks();
+                const grid = document.getElementById('tasksGrid');
+
+                grid.innerHTML = tasks.map((t, i) => `
+                <div class="bg-white rounded-[2rem] p-6 shadow-xl border border-slate-100 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group animate-slide-in-up animation-delay-${i * 100}">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${t.priority === 'High' ? 'bg-red-100 text-red-600' :
+                        t.priority === 'Medium' ? 'bg-amber-100 text-amber-600' :
+                            'bg-blue-100 text-blue-600'
+                    }">
+                           ${t.priority}
+                        </span>
+                        <div class="text-right">
+                             <span class="text-[10px] font-black uppercase tracking-widest text-slate-400 block">Due Date</span>
+                             <span class="text-xs font-bold text-slate-700">${t.due_date}</span>
+                        </div>
+                    </div>
+
+                    <h3 class="text-lg font-bold text-slate-900 mb-3 group-hover:text-indigo-600 transition-colors">${t.title}</h3>
+
+                    <div class="flex items-center justify-between mt-6 pt-4 border-t border-slate-50">
+                        <div class="text-sm font-semibold text-slate-500">Status</div>
+                         <span class="badge badge-${t.status === 'completed' ? 'success' : t.status === 'in_progress' ? 'info' : 'warning'} px-3 py-1">
+                            ${t.status.replace('_', ' ')}
+                        </span>
+                    </div>
+
+                     ${t.status !== 'completed' ? `
+                        <button onclick="alert('Task functionality mocked')" class="w-full mt-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 font-bold text-sm hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-200 transition-all">
+                            Mark as Complete
+                        </button>
+                    ` : ''}
+                </div>
+            `).join('');
+
+                lucide.createIcons();
+            } catch (error) {
+                console.error("Failed to load intern tasks:", error);
+            }
+        }
+
+        loadTasks();
+    </script>
+</body>
+
+</html>

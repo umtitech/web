@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UMTI Gateway - Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="css/variables.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Outfit', 'sans-serif'] },
+                    animation: {
+                        blob: "blob 7s infinite",
+                    },
+                    keyframes: {
+                        blob: {
+                            "0%": { transform: "translate(0px, 0px) scale(1)" },
+                            "33%": { transform: "translate(30px, -50px) scale(1.1)" },
+                            "66%": { transform: "translate(-20px, 20px) scale(0.9)" },
+                            "100%": { transform: "translate(0px, 0px) scale(1)" }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .animation-delay-2000 {
+            animation-delay: 2s;
+        }
+
+        .animation-delay-4000 {
+            animation-delay: 4s;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 font-sans">
+    <div
+        class="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 p-4 relative overflow-hidden">
+
+        <!-- Background Blobs -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div
+                class="absolute -top-40 -right-40 w-80 h-80 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob">
+            </div>
+            <div
+                class="absolute -bottom-40 -left-40 w-80 h-80 bg-indigo-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000">
+            </div>
+            <div
+                class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-purple-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000">
+            </div>
+        </div>
+
+        <a href="index.html" class="absolute top-4 left-4 z-10 group">
+            <button
+                class="bg-white/80 backdrop-blur-sm border border-slate-200 hover:bg-white shadow-sm px-4 py-2 rounded-lg flex items-center gap-2 transition-all">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                <span class="hidden sm:inline text-sm font-medium">Back to Home</span>
+            </button>
+        </a>
+
+        <div
+            class="w-full max-w-md relative z-10 bg-white/95 backdrop-blur-sm shadow-2xl rounded-xl border border-white/20 p-6 sm:p-8">
+            <div class="text-center pb-6 space-y-4">
+                <div class="flex justify-center mb-2">
+                    <div
+                        class="relative w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 p-0.5 shadow-lg">
+                        <div class="w-full h-full bg-white rounded-2xl flex items-center justify-center p-2">
+                            <img src="assets/images/umti-20tech-transparent-20-20only-20logo.png" alt="UMTI Tech"
+                                class="object-contain w-full h-full">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-900">UMTI Gateway</h2>
+                    <p class="text-base text-slate-600 mt-2">Sign in to verify your identity</p>
+                </div>
+            </div>
+
+            <form id="loginForm" class="space-y-5">
+                <div id="error-alert"
+                    class="hidden p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm flex items-start gap-2">
+                    <i data-lucide="alert-circle" class="w-4 h-4 mt-0.5 shrink-0"></i>
+                    <span id="error-message"></span>
+                </div>
+
+                <div class="space-y-2">
+                    <label for="email" class="text-sm font-medium text-slate-700">Email Address</label>
+                    <div class="relative">
+                        <i data-lucide="mail"
+                            class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400"></i>
+                        <input id="email" type="email" placeholder="your.email@example.com" required
+                            class="w-full pl-11 h-12 bg-slate-50 border border-slate-200 rounded-md focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all outline-none">
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <label for="password" class="text-sm font-medium text-slate-700">Password</label>
+                    <div class="relative">
+                        <i data-lucide="lock"
+                            class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400"></i>
+                        <input id="password" type="password" placeholder="Enter your password" required
+                            class="w-full pl-11 h-12 bg-slate-50 border border-slate-200 rounded-md focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all outline-none">
+                    </div>
+                </div>
+
+                <button type="submit" id="submitBtn"
+                    class="w-full h-12 text-base font-semibold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl text-white rounded-md flex items-center justify-center gap-2">
+                    <span id="btnText">Sign In</span>
+                    <i data-lucide="log-in" class="w-5 h-5" id="btnIcon"></i>
+                    <i data-lucide="loader-2" class="w-5 h-5 animate-spin hidden" id="btnSpinner"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        const form = document.getElementById('loginForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const btnText = document.getElementById('btnText');
+        const btnIcon = document.getElementById('btnIcon');
+        const btnSpinner = document.getElementById('btnSpinner');
+        const errorAlert = document.getElementById('error-alert');
+        const errorMessage = document.getElementById('error-message');
+        const emailInput = document.getElementById('email');
+        const roleSelect = document.getElementById('role');
+
+        const ROLE_DASHBOARDS = {
+            admin: 'admin-dashboard.html',
+            student: 'student-dashboard.html',
+            employee: 'employee-dashboard.html',
+            client: 'client-dashboard.html',
+            intern: 'intern-dashboard.html'
+        };
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const email = emailInput.value.trim();
+            const password = document.getElementById('password').value;
+
+            // Validation
+            if (!email || !password) {
+                errorMessage.textContent = "Please fill in all fields";
+                errorAlert.classList.remove('hidden');
+                return;
+            }
+            // Removed developer bypass
+
+            // Loading State
+            submitBtn.disabled = true;
+            btnText.textContent = "Signing In...";
+            btnIcon.classList.add('hidden');
+            btnSpinner.classList.remove('hidden');
+            errorAlert.classList.add('hidden');
+
+            try {
+                // Simulate network delay
+                await new Promise(resolve => setTimeout(resolve, 800));
+
+                // Allow only specific exact credentials
+                if (password !== "admin123") {
+                    throw new Error('Invalid credentials');
+                }
+
+                let role = '';
+                if (email === 'admin@gmail.com') role = 'admin';
+                else if (email === 'student@gmail.com') role = 'student';
+                else if (email === 'client@gmail.com') role = 'client';
+                else if (email === 'intern@gmail.com') role = 'intern';
+                else {
+                    throw new Error('Invalid credentials');
+                }
+
+                const token = "dummy_frontend_token_" + Date.now();
+                const rolePrefix = `${role}_`;
+
+                localStorage.setItem(`${rolePrefix}umti_token`, token);
+                localStorage.setItem(`${rolePrefix}user_role`, role);
+
+                localStorage.setItem('umti_token', token);
+                localStorage.setItem('user_role', role);
+                localStorage.setItem('umti_session_active', 'true');
+                localStorage.setItem('umti_user_email', email);
+                localStorage.setItem('umti_user_role', role);
+                localStorage.setItem('umti_login_time', new Date().toISOString());
+
+                const dashboardPage = ROLE_DASHBOARDS[role];
+                if (dashboardPage) {
+                    window.location.href = dashboardPage;
+                } else {
+                    throw new Error("Invalid role dashboard mapping.");
+                }
+
+            } catch (error) {
+                submitBtn.disabled = false;
+                btnText.textContent = "Sign In";
+                btnIcon.classList.remove('hidden');
+                btnSpinner.classList.add('hidden');
+
+                errorMessage.textContent = "you entered wrong credentials please contact the team";
+                errorAlert.classList.remove('hidden');
+            }
+        });
+
+        // Reinitialize icons after any DOM updates
+        setTimeout(() => lucide.createIcons(), 100);
+    </script>
+</body>
+
+</html>
