@@ -283,34 +283,34 @@
                     value: dashboardData.total_clients,
                     change: '+12%',
                     icon: 'users',
-                    gradient: 'from-blue-500 to-cyan-500'
+                    from: '#3b82f6', to: '#06b6d4'
                 },
                 {
                     title: 'Total Projects',
                     value: dashboardData.total_projects,
                     change: '+5%',
                     icon: 'book-open',
-                    gradient: 'from-purple-500 to-pink-500'
+                    from: '#a855f7', to: '#ec4899'
                 },
                 {
                     title: 'Active Users',
                     value: Object.values(dashboardData.users_by_role).reduce((a, b) => a + b, 0),
                     change: '+8%',
                     icon: 'trending-up',
-                    gradient: 'from-orange-500 to-red-500'
+                    from: '#f97316', to: '#ef4444'
                 },
                 {
                     title: 'Attendance Rate',
                     value: `${dashboardData.attendance_summary.attendance_rate}%`,
                     change: '+2%',
                     icon: 'check-circle-2',
-                    gradient: 'from-green-500 to-emerald-500'
+                    from: '#22c55e', to: '#10b981'
                 }
             ];
 
             const grid = document.getElementById('statsGrid');
             grid.innerHTML = stats.map((stat, index) => `
-                <div class="stat-card animate-slide-in-up animation-delay-${index * 100}" style="--gradient-from: var(--color-${stat.gradient.split('-')[1]}); --gradient-to: var(--color-${stat.gradient.split('-')[3]}); --shadow-color: 99, 102, 241;">
+                <div class="stat-card animate-slide-in-up animation-delay-${index * 100}" style="--gradient-from: ${stat.from}; --gradient-to: ${stat.to}; --shadow-color: 99, 102, 241;">
                     <div class="flex items-start justify-between mb-4">
                         <div class="stat-icon-container">
                             <i data-lucide="${stat.icon}" class="w-6 h-6 text-white"></i>
