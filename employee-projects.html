@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Projects - UMTI Tech</title>
+    <link rel="icon" type="image/png" href="assets/images/umti-20tech-transparent-20-20only-20logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config = { theme: { extend: { fontFamily: { sans: ['Outfit', 'sans-serif'] } } } }</script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="css/portal-styles.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <style>
+        body {
+            background-color: #f8fafc;
+        }
+    </style>
+</head>
+
+<body class="font-sans">
+    <aside id="sidebar" class="portal-sidebar">
+        <div class="flex items-center gap-3 mb-8 px-2">
+            <div
+                class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center p-1.5">
+                <img src="assets/images/umti-20tech-transparent-20-20only-20logo.png" alt="UMTI Tech"
+                    class="w-full h-full object-contain">
+            </div>
+            <span class="text-xl font-bold text-slate-900">UMTI<span class="text-indigo-600">Tech</span></span>
+        </div>
+        <nav id="dynamicSidebar" class="space-y-2"></nav>
+        <div class="mt-auto pt-8">
+            <button onclick="Auth.logout()" class="portal-nav-link w-full text-red-600 hover:bg-red-50">
+                <i data-lucide="log-out" class="w-5 h-5"></i><span>Logout</span>
+            </button>
+        </div>
+    </aside>
+
+    <header class="portal-header">
+        <button id="mobileMenuBtn" class="lg:hidden p-2 hover:bg-slate-100 rounded-lg">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+        <div class="flex items-center gap-4 ml-auto">
+            <button class="p-2 hover:bg-slate-100 rounded-lg relative">
+                <i data-lucide="bell" class="w-5 h-5"></i>
+                <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+            </button>
+            <div class="flex items-center gap-3">
+                <div
+                    class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white font-bold">
+                    <span id="headerInitial">E</span>
+                </div>
+                <div class="hidden sm:block">
+                    <p class="text-sm font-semibold text-slate-900" id="headerName">Employee</p>
+                    <p class="text-xs text-slate-500" id="headerEmail">employee@umti.com</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="portal-content">
+        <div class="space-y-8 pb-10">
+            <!-- Welcome Section -->
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div class="animate-slide-in-left">
+                    <h1 class="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight mb-2">
+                        My <span class="gradient-text">Projects</span>
+                    </h1>
+                    <p class="text-slate-500 font-medium tracking-wide">Manage your assigned projects and submit work
+                        updates.</p>
+                </div>
+
+                <div
+                    class="bg-white px-6 py-3 rounded-2xl shadow-xl shadow-slate-100 flex items-center gap-4 animate-slide-in-up">
+                    <div class="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center">
+                        <i data-lucide="sparkles" class="w-5 h-5 text-indigo-600 animate-pulse"></i>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">
+                            Status</p>
+                        <p class="text-xl font-bold text-slate-900 leading-none italic">Elite Producer</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Metrics -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6" id="statsGrid"></div>
+
+            <!-- Search -->
+            <div
+                class="bg-white/60 backdrop-blur-md p-4 rounded-3xl shadow-sm border border-slate-100/50 flex items-center gap-4 group hover:shadow-lg transition-all duration-500 animate-slide-in-up">
+                <div
+                    class="w-10 h-10 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-500 group-focus-within:bg-indigo-600 group-focus-within:text-white transition-all">
+                    <i data-lucide="search" class="w-5 h-5"></i>
+                </div>
+                <input type="text" id="searchInput" oninput="filterProjects()"
+                    placeholder="Search curricula by venture identity or lead classifier..."
+                    class="w-full border-none bg-transparent focus:outline-none px-0 h-auto text-lg font-medium placeholder:text-slate-400">
+                <button onclick="loadProjects()"
+                    class="rounded-xl h-10 w-10 p-0 text-slate-400 hover:text-indigo-600 transition-all flex items-center justify-center">
+                    <i data-lucide="refresh-cw" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Projects Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="projectsGrid"></div>
+        </div>
+    </main>
+
+    <!-- Submission Modal -->
+    <div id="submitModal" class="dialog-overlay">
+        <div class="dialog-content rounded-[2.5rem] p-0 overflow-hidden bg-white/95 backdrop-blur-2xl max-w-xl">
+            <div class="bg-slate-900 p-8 text-white relative">
+                <div class="absolute top-0 right-0 p-8 opacity-10"><i data-lucide="send" class="w-24 h-24"></i></div>
+                <h2 class="text-2xl font-black italic tracking-tight">Artifact Transmission</h2>
+                <p class="text-slate-400 text-sm mt-2 font-medium">Transmit your venture deliverables to the ecosystem
+                    stream.</p>
+            </div>
+            <form onsubmit="handleSubmission(event)" class="p-8 space-y-6">
+                <input type="hidden" id="submitProjectId">
+                <div class="bg-slate-50 p-5 rounded-2xl border border-slate-100">
+                    <h4 class="font-black text-slate-900 italic mb-1" id="modalTitle">Project Title</h4>
+                    <p class="text-xs font-medium text-slate-500 line-clamp-2" id="modalDesc">Project description...</p>
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Document
+                        Attachment (Optional)</label>
+                    <div
+                        class="border-2 border-dashed border-slate-200 rounded-2xl p-6 flex flex-col items-center justify-center bg-slate-50 hover:bg-slate-100 transition-colors cursor-pointer relative group/upload">
+                        <input type="file" onchange="updateFileName(this)"
+                            class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                        <i data-lucide="upload"
+                            class="w-8 h-8 text-slate-400 mb-2 group-hover/upload:text-indigo-500 transition-colors"></i>
+                        <p class="text-xs text-slate-500 font-medium" id="fileName">Attach work artifacts (Docs, PDF,
+                            Images, etc.)</p>
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Transmission
+                        Payload</label>
+                    <textarea required rows="6"
+                        placeholder="Describe your work, paste links (GitHub, Drive, etc.), or add notes..."
+                        class="w-full rounded-2xl border border-slate-200 bg-slate-50 font-medium p-4 focus:ring-2 focus:ring-indigo-500/20 shadow-sm outline-none transition-all"></textarea>
+                </div>
+                <div class="flex gap-4 pt-2">
+                    <button type="button" onclick="closeModal('submitModal')"
+                        class="px-6 font-bold text-slate-500 hover:bg-slate-50 rounded-2xl">Cancel</button>
+                    <button type="submit"
+                        class="flex-1 bg-indigo-600 hover:bg-slate-900 text-white rounded-2xl h-14 font-black shadow-xl shadow-indigo-100 transition-all">Initialize
+                        Transmission</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <script src="js/utils/auth.js"></script>
+    <script src="js/utils/portal-api.js"></script>
+    <script src="js/components/portal-layout.js"></script>
+    <script>
+        Auth.protectPage('employee');
+        const currentUser = Auth.getCurrentUser();
+
+
+        let allProjects = [];
+
+        async function loadProjects() {
+            try {
+                allProjects = await PortalAPI.getEmployeeProjects();
+                renderStats();
+                renderProjects(allProjects);
+                lucide.createIcons();
+            } catch (error) {
+                console.error("Failed to load employee projects:", error);
+            }
+        }
+
+        function renderStats() {
+            const active = allProjects.filter(p => !p.submission).length;
+            const stats = [
+                { label: "Assigned Ventures", value: allProjects.length, icon: 'briefcase', color: "text-indigo-600", bg: "bg-indigo-50" },
+                { label: "Active Flow", value: active, icon: 'zap', color: "text-emerald-600", bg: "bg-emerald-50" },
+                { label: "Efficiency Tier", value: "Locked", icon: 'target', color: "text-purple-600", bg: "bg-purple-50" },
+                { label: "Network Uptime", value: "99.9%", icon: 'shield-check', color: "text-amber-600", bg: "bg-amber-50" }
+            ];
+
+            document.getElementById('statsGrid').innerHTML = stats.map((stat, i) => `
+                <div class="animate-slide-in-up animation-delay-${i * 100}">
+                    <div class="glass-card border-none p-5 flex items-center gap-5 hover:shadow-xl transition-all group relative overflow-hidden bg-white/60 rounded-2xl">
+                         <div class="w-12 h-12 rounded-2xl ${stat.bg} flex items-center justify-center shrink-0 ${stat.color} shadow-sm group-hover:rotate-12 transition-transform">
+                            <i data-lucide="${stat.icon}" class="w-5 h-5"></i>
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1.5">${stat.label}</p>
+                            <p class="text-xl font-bold text-slate-900 leading-none truncate">${stat.value}</p>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderProjects(projects) {
+            const grid = document.getElementById('projectsGrid');
+            if (projects.length === 0) {
+                grid.innerHTML = `<div class="col-span-full py-24 text-center glass-card border-none rounded-[2.5rem]">
+                    <div class="w-20 h-20 mx-auto bg-slate-50 rounded-full flex items-center justify-center mb-6">
+                        <i data-lucide="briefcase" class="w-10 h-10 text-slate-200"></i>
+                    </div>
+                    <h3 class="text-xl font-black text-slate-900 italic">Venture Void</h3>
+                    <p class="text-slate-400 font-medium italic">No strategic ventures are currently allocated to your profile.</p>
+                </div>`;
+                return;
+            }
+
+            grid.innerHTML = projects.map((p, i) => `
+                <div class="animate-slide-in-up animation-delay-${i * 50}">
+                     <div class="glass-card border-white/60 h-full hover:shadow-2xl transition-all duration-500 overflow-hidden flex flex-col group relative rounded-[2.5rem] bg-white/70">
+                         <div class="relative pb-4 p-6">
+                            <div class="w-14 h-14 rounded-2xl bg-slate-900 text-white flex items-center justify-center shadow-xl mb-6 group-hover:rotate-12 transition-transform">
+                                <i data-lucide="briefcase" class="w-7 h-7"></i>
+                            </div>
+                            <div class="space-y-1">
+                                <span class="${p.status === 'completed' ? 'bg-emerald-500 shadow-emerald-100' :
+                    p.status === 'in_progress' ? 'bg-indigo-600 shadow-indigo-100' :
+                        'bg-amber-600 shadow-amber-100'
+                } text-white border-transparent px-3 py-0.5 rounded-lg uppercase text-[8px] font-black tracking-widest shadow-lg mb-2 inline-block">
+                                    ${p.status.replace('_', ' ')}
+                                </span>
+                                <h3 class="text-xl font-black text-slate-900 italic leading-tight line-clamp-1 group-hover:text-indigo-600 transition-colors">"${p.title}"</h3>
+                            </div>
+                         </div>
+
+                         <div class="flex-1 px-6 pb-6 relative z-10 flex flex-col gap-6">
+                            <p class="text-sm font-medium text-slate-500 line-clamp-2 leading-relaxed italic">
+                                ${p.description}
+                            </p>
+                            <div class="space-y-3">
+                                ${p.client_name ? `
+                                    <div class="flex items-center gap-3 text-xs font-black text-slate-700">
+                                        <div class="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600">
+                                            <i data-lucide="user" class="w-4 h-4"></i>
+                                        </div>
+                                        <span class="truncate">Client: ${p.client_name}</span>
+                                    </div>
+                                ` : ''}
+                                ${p.submission ? `
+                                    <div class="p-5 bg-emerald-50/50 border border-emerald-100 rounded-3xl relative overflow-hidden group/sub shadow-sm transition-all hover:shadow-md">
+                                        <div class="absolute top-0 right-0 p-4 opacity-[0.03]">
+                                            <i data-lucide="file-text" class="w-16 h-16"></i>
+                                        </div>
+                                        <div class="flex items-center gap-3 mb-2 text-emerald-700 font-black text-[10px] uppercase tracking-[0.2em]">
+                                            <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                                            Work Delivered
+                                        </div>
+                                        <p class="text-sm text-slate-600 leading-relaxed font-medium">"${p.submission}"</p>
+                                         ${p.submission_file ? `
+                                            <button class="mt-4 w-full h-10 rounded-xl border border-emerald-200 bg-white hover:bg-emerald-50 text-emerald-600 font-bold text-xs shadow-sm transition-all flex items-center justify-center gap-2">
+                                                <i data-lucide="download" class="w-4 h-4"></i> View Submission Artifact
+                                            </button>
+                                         ` : ''}
+                                    </div>
+                                ` : ''}
+                            </div>
+                            
+                            <div class="mt-auto bg-slate-50/50 p-4 rounded-2xl border border-slate-100/50 flex justify-between items-center">
+                                <div class="flex flex-col">
+                                    <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Deadline</span>
+                                    <span class="text-xs font-black text-slate-900">${p.deadline ? (new Date(p.deadline)).toLocaleDateString() : 'N/A'}</span>
+                                </div>
+                                <i data-lucide="calendar" class="w-4 h-4 text-indigo-400"></i>
+                            </div>
+                         </div>
+
+                         <div class="px-6 pb-6 pt-0">
+                            ${!p.submission ? `
+                                <button onclick="openSubmitModal(${p.id}, '${p.title}', '${p.description}')" class="w-full h-12 rounded-2xl bg-slate-900 hover:bg-indigo-600 text-white font-black text-[10px] uppercase tracking-widest transition-all shadow-xl shadow-slate-200 flex items-center justify-center gap-2">
+                                    Submit Work <i data-lucide="send" class="w-4 h-4"></i>
+                                </button>
+                            ` : `
+                                <button disabled class="w-full h-12 rounded-2xl border border-slate-100 bg-white hover:bg-slate-50 text-slate-400 font-black text-[10px] uppercase tracking-widest transition-all flex items-center justify-center gap-2 cursor-not-allowed">
+                                    Transmission Locked <i data-lucide="shield-check" class="w-4 h-4"></i>
+                                </button>
+                            `}
+                         </div>
+                     </div>
+                </div>
+            `).join('');
+        }
+
+        function filterProjects() {
+            const term = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = allProjects.filter(p =>
+                p.title.toLowerCase().includes(term) ||
+                p.description.toLowerCase().includes(term)
+            );
+            renderProjects(filtered);
+            lucide.createIcons();
+        }
+
+        function openSubmitModal(id, title, desc) {
+            document.getElementById('submitProjectId').value = id;
+            document.getElementById('modalTitle').textContent = `"${title}"`;
+            document.getElementById('modalDesc').textContent = desc;
+            document.getElementById('submitModal').classList.add('active');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+
+        function updateFileName(input) {
+            if (input.files && input.files[0]) {
+                document.getElementById('fileName').textContent = input.files[0].name;
+                document.getElementById('fileName').classList.add('text-indigo-600');
+            }
+        }
+
+        async function handleSubmission(e) {
+            e.preventDefault();
+            const id = document.getElementById('submitProjectId').value;
+            const payload = e.target.querySelector('textarea').value;
+
+            try {
+                await PortalAPI.submitProjectWork(id, { submission: payload });
+                alert('Project work submitted successfully!');
+                closeModal('submitModal');
+                await loadProjects();
+            } catch (error) {
+                alert("Failed to submit project work: " + error.message);
+            }
+        }
+
+        loadProjects();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - UMTI Tech</title>
+    <link rel="icon" type="image/png" href="assets/images/umti-20tech-transparent-20-20only-20logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config = { theme: { extend: { fontFamily: { sans: ['Outfit', 'sans-serif'] } } } }</script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="css/portal-styles.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <style>
+        body {
+            background-color: #f8fafc;
+        }
+    </style>
+</head>
+
+<body class="font-sans">
+    <!-- Sidebar (Inject logic will handle updating active link) -->
+    <aside id="sidebar" class="portal-sidebar">
+        <div class="flex items-center gap-3 mb-8 px-2">
+            <div
+                class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center p-1.5">
+                <img src="assets/images/umti-20tech-transparent-20-20only-20logo.png" alt="UMTI Tech"
+                    class="w-full h-full object-contain">
+            </div>
+            <span class="text-xl font-bold text-slate-900">UMTI<span class="text-indigo-600">Tech</span></span>
+        </div>
+        <!-- Steps to create dynamic sidebar links based on role -->
+        <nav id="dynamicSidebar" class="space-y-2"></nav>
+
+        <div class="mt-auto pt-8">
+            <button onclick="Auth.logout()" class="portal-nav-link w-full text-red-600 hover:bg-red-50">
+                <i data-lucide="log-out" class="w-5 h-5"></i><span>Logout</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Header -->
+    <header class="portal-header">
+        <button id="mobileMenuBtn" class="lg:hidden p-2 hover:bg-slate-100 rounded-lg">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+        <div class="flex items-center gap-4 ml-auto">
+            <button class="p-2 hover:bg-slate-100 rounded-lg relative">
+                <i data-lucide="bell" class="w-5 h-5"></i>
+                <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+            </button>
+            <div class="flex items-center gap-3">
+                <div
+                    class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white font-bold">
+                    <span id="headerInitial">U</span>
+                </div>
+                <div class="hidden sm:block">
+                    <p class="text-sm font-semibold text-slate-900" id="headerName">User</p>
+                    <p class="text-xs text-slate-500" id="headerEmail">user@example.com</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="portal-content">
+        <div class="space-y-8 pb-10">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div class="animate-slide-in-left">
+                    <h1 class="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight mb-2">
+                        User <span class="gradient-text">Profile</span>
+                    </h1>
+                    <p class="text-slate-500 font-medium tracking-wide">Manage your profile information and security
+                        settings.</p>
+                </div>
+
+                <button onclick="Auth.logout()"
+                    class="rounded-2xl border border-red-100 text-red-500 hover:bg-red-50 font-black text-[10px] uppercase tracking-widest px-6 h-12 shadow-sm transition-all flex items-center gap-2">
+                    Logout <i data-lucide="log-out" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <!-- Identity Metrics -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6" id="statsGrid">
+                <!-- Stats injected here -->
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Profile Information Card -->
+                <div
+                    class="glass-card border-none overflow-hidden rounded-[2.5rem] bg-white/60 backdrop-blur-2xl shadow-2xl h-full animate-slide-in-up animation-delay-200">
+                    <div class="bg-slate-900 p-8 text-center relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-8 opacity-10">
+                            <i data-lucide="fingerprint" class="w-32 h-32 text-white"></i>
+                        </div>
+                        <div class="relative inline-block group">
+                            <div
+                                class="w-32 h-32 rounded-full border-4 border-white shadow-2xl overflow-hidden bg-indigo-600 flex items-center justify-center text-white text-3xl font-black mx-auto">
+                                <span id="profileInitial">U</span>
+                            </div>
+                            <button onclick="document.getElementById('fileInput').click()"
+                                class="absolute bottom-1 right-1 w-10 h-10 bg-indigo-600 text-white rounded-2xl border-2 border-white flex items-center justify-center shadow-xl hover:bg-slate-900 transition-all hover:scale-110">
+                                <i data-lucide="camera" class="w-5 h-5"></i>
+                            </button>
+                            <input type="file" id="fileInput" class="hidden" accept="image/*">
+                        </div>
+                        <h3 class="text-xl font-black text-white mt-6" id="profileName">Loading...</h3>
+                        <p class="text-slate-400 text-[10px] font-black uppercase tracking-[0.2em] mt-1"
+                            id="profileRole">USER</p>
+                    </div>
+                    <div class="p-8 space-y-6">
+                        <div class="space-y-4">
+                            <div class="flex items-center gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-100/50">
+                                <div
+                                    class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-indigo-500">
+                                    <i data-lucide="mail" class="w-5 h-5"></i>
+                                </div>
+                                <div class="min-w-0">
+                                    <p
+                                        class="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">
+                                        Email</p>
+                                    <p class="text-sm font-bold text-slate-900 truncate" id="profileEmail">
+                                        userData.email</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-100/50">
+                                <div
+                                    class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-emerald-500">
+                                    <i data-lucide="shield" class="w-5 h-5"></i>
+                                </div>
+                                <div class="min-w-0 flex-1">
+                                    <p
+                                        class="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">
+                                        User Role</p>
+                                    <p class="text-sm font-bold text-slate-900 uppercase" id="profileRoleText">
+                                        userData.role</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            class="p-4 rounded-2xl bg-indigo-50 border border-indigo-100 italic text-[10px] font-bold text-indigo-900 leading-relaxed text-center">
+                            "Your profile picture is visible to other users in the system."
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security & Access Card -->
+                <div
+                    class="lg:col-span-2 glass-card border-none overflow-hidden rounded-[2.5rem] bg-white/60 backdrop-blur-2xl shadow-2xl h-full animate-slide-in-up animation-delay-300">
+                    <div class="p-8 pb-0">
+                        <div class="text-2xl font-black italic flex items-center gap-3 tracking-tight mb-2">
+                            <div class="p-2 bg-slate-900 rounded-xl text-white">
+                                <i data-lucide="key" class="w-6 h-6"></i>
+                            </div>
+                            Account Settings
+                        </div>
+                        <p class="font-medium text-slate-500 italic">Manage your account information and security.</p>
+                    </div>
+                    <div class="p-8 space-y-8">
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <div class="space-y-6">
+                                <div class="space-y-2">
+                                    <label
+                                        class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Identity
+                                        Display Name</label>
+                                    <input id="inputName" type="text" disabled
+                                        class="w-full rounded-2xl border-slate-200 bg-slate-50/50 h-12 text-sm font-bold shadow-sm px-4 outline-none">
+                                </div>
+                                <div class="space-y-2">
+                                    <label
+                                        class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Communication
+                                        Signal (Email)</label>
+                                    <input id="inputEmail" type="text" disabled
+                                        class="w-full rounded-2xl border-slate-200 bg-slate-50/50 h-12 text-sm font-bold shadow-sm px-4 outline-none">
+                                </div>
+                            </div>
+                            <div class="space-y-6">
+                                <div
+                                    class="p-6 rounded-[2.5rem] bg-slate-900 text-white relative group overflow-hidden shadow-2xl">
+                                    <div class="relative z-10">
+                                        <h4
+                                            class="text-[10px] font-black uppercase tracking-[0.2em] mb-4 text-indigo-400">
+                                            Security Snapshot</h4>
+                                        <div class="space-y-4">
+                                            <div
+                                                class="flex justify-between items-center border-b border-white/10 pb-3">
+                                                <span class="text-xs font-bold text-slate-400">Account Security</span>
+                                                <span
+                                                    class="bg-emerald-500/20 text-emerald-400 px-2 py-0.5 font-black text-[8px] uppercase tracking-widest rounded">Active</span>
+                                            </div>
+                                            <div
+                                                class="flex justify-between items-center border-b border-white/10 pb-3">
+                                                <span class="text-xs font-bold text-slate-400">Access ID</span>
+                                                <span class="text-xs font-black text-indigo-300">...8f9e</span>
+                                            </div>
+                                            <div class="flex justify-between items-center">
+                                                <span class="text-xs font-bold text-slate-400">Connection Status</span>
+                                                <span class="text-xs font-black text-white">Encrypted</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="absolute top-0 right-0 p-8 opacity-5 group-hover:rotate-12 transition-transform duration-700">
+                                        <i data-lucide="shield" class="w-32 h-32"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div
+                            class="pt-8 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-6">
+                            <div class="flex items-center gap-4">
+                                <div
+                                    class="w-12 h-12 rounded-2xl bg-amber-50 flex items-center justify-center text-amber-600">
+                                    <i data-lucide="sparkles" class="w-6 h-6"></i>
+                                </div>
+                                <div>
+                                    <p class="font-black text-slate-900 text-sm italic leading-none mb-1">Standard
+                                        Account</p>
+                                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Active
+                                        member since 2026</p>
+                                </div>
+                            </div>
+                            <button disabled
+                                class="bg-slate-900 text-white rounded-2xl h-14 px-10 font-black italic shadow-2xl transition-all opacity-50 cursor-not-allowed flex items-center gap-3">
+                                <i data-lucide="save" class="w-5 h-5"></i> Save Changes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/utils/auth.js"></script>
+    <script src="js/utils/portal-api.js"></script>
+    <script src="js/components/portal-layout.js"></script>
+    <script>
+        Auth.protectPage(); // Protect page for any logged in user
+        const currentUser = Auth.getCurrentUser();
+
+        // Setup sidebar based on role
+
+        async function loadProfile() {
+            try {
+                // Load Data
+                const data = await PortalAPI.getProfile();
+
+                // Populate Page Content
+                document.getElementById('profileName').textContent = data.name;
+                document.getElementById('profileRole').textContent = data.role;
+                document.getElementById('profileInitial').textContent = data.name.charAt(0).toUpperCase();
+
+                document.getElementById('profileEmail').textContent = data.email;
+                document.getElementById('profileRoleText').textContent = data.role;
+
+                document.getElementById('inputName').value = data.name;
+                document.getElementById('inputEmail').value = data.email;
+
+                // Render Stats
+                const stats = [
+                    { label: "Role", value: data.role.toUpperCase(), icon: 'shield', color: "text-indigo-600", bg: "bg-indigo-50" },
+                    { label: "Account Level", value: "Standard", icon: 'award', color: "text-emerald-600", bg: "bg-emerald-50" },
+                    { label: "Status", value: "Verified", icon: 'zap', color: "text-purple-600", bg: "bg-purple-50" },
+                    { label: "Security", value: "Secure", icon: 'shield-check', color: "text-amber-600", bg: "bg-amber-50" }
+                ];
+
+                const statsContainer = document.getElementById('statsGrid');
+                statsContainer.innerHTML = stats.map((stat, i) => `
+                <div class="animate-slide-in-up animation-delay-${i * 100}">
+                    <div class="glass-card border-none p-5 flex items-center gap-5 hover:shadow-xl transition-all group relative overflow-hidden bg-white/60 rounded-2xl">
+                        <div class="w-12 h-12 rounded-2xl ${stat.bg} flex items-center justify-center ${stat.color} shadow-sm group-hover:rotate-12 transition-transform">
+                            <i data-lucide="${stat.icon}" class="w-5 h-5"></i>
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1.5">${stat.label}</p>
+                            <p class="text-xl font-bold text-slate-900 leading-none truncate">${stat.value}</p>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+                lucide.createIcons();
+            } catch (error) {
+                console.error("Failed to load profile:", error);
+            }
+        }
+
+        loadProfile();
+    </script>
+</body>
+
+</html>

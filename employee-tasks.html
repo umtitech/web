@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Tasks - UMTI Tech</title>
+    <link rel="icon" type="image/png" href="assets/images/umti-20tech-transparent-20-20only-20logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config = { theme: { extend: { fontFamily: { sans: ['Outfit', 'sans-serif'] } } } }</script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="css/portal-styles.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <style>
+        body {
+            background-color: #f8fafc;
+        }
+    </style>
+</head>
+
+<body class="font-sans">
+    <aside id="sidebar" class="portal-sidebar">
+        <div class="flex items-center gap-3 mb-8 px-2">
+            <div
+                class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center p-1.5">
+                <img src="assets/images/umti-20tech-transparent-20-20only-20logo.png" alt="UMTI Tech"
+                    class="w-full h-full object-contain">
+            </div>
+            <span class="text-xl font-bold text-slate-900">UMTI<span class="text-indigo-600">Tech</span></span>
+        </div>
+        <nav id="dynamicSidebar" class="space-y-2"></nav>
+        <div class="mt-auto pt-8">
+            <button onclick="Auth.logout()" class="portal-nav-link w-full text-red-600 hover:bg-red-50">
+                <i data-lucide="log-out" class="w-5 h-5"></i><span>Logout</span>
+            </button>
+        </div>
+    </aside>
+
+    <header class="portal-header">
+        <button id="mobileMenuBtn" class="lg:hidden p-2 hover:bg-slate-100 rounded-lg">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+        <div class="flex items-center gap-4 ml-auto">
+            <button class="p-2 hover:bg-slate-100 rounded-lg relative">
+                <i data-lucide="bell" class="w-5 h-5"></i>
+                <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+            </button>
+            <div class="flex items-center gap-3">
+                <div
+                    class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white font-bold">
+                    <span id="headerInitial">E</span>
+                </div>
+                <div class="hidden sm:block">
+                    <p class="text-sm font-semibold text-slate-900" id="headerName">Employee</p>
+                    <p class="text-xs text-slate-500" id="headerEmail">employee@umti.com</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="portal-content">
+        <div class="space-y-8 pb-10">
+            <!-- Welcome Section -->
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div class="animate-slide-in-left">
+                    <h1 class="text-3xl md:text-4xl font-bold text-slate-900 mb-2 tracking-tight">
+                        My <span class="gradient-text">Tasks</span>
+                    </h1>
+                    <p class="text-slate-500 font-medium tracking-wide">Manage and track your assigned projects and
+                        objectives.</p>
+                </div>
+
+                <div
+                    class="bg-white px-6 py-3 rounded-2xl shadow-xl shadow-slate-100 flex items-center gap-4 animate-slide-in-up">
+                    <div class="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center">
+                        <i data-lucide="zap" class="w-5 h-5 text-indigo-600 animate-pulse"></i>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">
+                            Efficiency</p>
+                        <p class="text-xl font-bold text-slate-900 leading-none">High</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6" id="statsGrid"></div>
+
+            <!-- Tasks Grid -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="tasksGrid"></div>
+        </div>
+    </main>
+
+    <script src="js/utils/auth.js"></script>
+    <script src="js/utils/portal-api.js"></script>
+    <script src="js/components/portal-layout.js"></script>
+    <script>
+        Auth.protectPage('employee');
+        const currentUser = Auth.getCurrentUser();
+
+
+        let allTasks = [];
+
+        async function loadTasks() {
+            try {
+                allTasks = await PortalAPI.getEmployeeTasks();
+                renderStats();
+                renderTasks(allTasks);
+                lucide.createIcons();
+            } catch (error) {
+                console.error("Failed to load employee tasks:", error);
+            }
+        }
+
+        function getPriorityColor(priority) {
+            switch (priority?.toLowerCase()) {
+                case "high": return "bg-red-500 text-white";
+                case "medium": return "bg-amber-400 text-white";
+                case "low": return "bg-emerald-500 text-white";
+                default: return "bg-slate-500 text-white";
+            }
+        }
+
+        function renderStats() {
+            const highPriority = allTasks.filter(t => t.priority.toLowerCase() === 'high').length;
+            const overdue = allTasks.filter(t => new Date(t.due_date) < new Date() && t.status !== 'completed').length;
+
+            const stats = [
+                { label: "My Tasks", value: allTasks.length, icon: 'layers', color: "text-indigo-600", bg: "bg-indigo-50" },
+                { label: "High Priority", value: highPriority, icon: 'alert-circle', color: "text-red-500", bg: "bg-red-50" },
+                { label: "Completion Rate", value: "94%", icon: 'trending-up', color: "text-emerald-600", bg: "bg-emerald-50" },
+                { label: "Overdue", value: overdue, icon: 'target', color: "text-purple-600", bg: "bg-purple-50" }
+            ];
+
+            document.getElementById('statsGrid').innerHTML = stats.map((stat, i) => `
+                <div class="animate-slide-in-up animation-delay-${i * 100}">
+                    <div class="glass-card border-none p-5 flex items-center gap-5 hover:shadow-xl transition-all group relative overflow-hidden bg-white/60 rounded-2xl">
+                        <div class="absolute top-0 right-0 w-16 h-16 bg-slate-900 opacity-[0.02] -mr-8 -mt-8 rounded-full group-hover:scale-150 transition-transform duration-700"></div>
+                        <div class="w-12 h-12 rounded-2xl ${stat.bg} flex items-center justify-center shrink-0 ${stat.color} shadow-sm group-hover:rotate-12 transition-transform">
+                            <i data-lucide="${stat.icon}" class="w-5 h-5"></i>
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1.5">${stat.label}</p>
+                            <p class="text-xl font-bold text-slate-900 leading-none truncate">${stat.value}</p>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderTasks(tasks) {
+            const grid = document.getElementById('tasksGrid');
+            if (tasks.length === 0) {
+                grid.innerHTML = `<div class="col-span-full py-24 text-center glass-card border-none rounded-[2.5rem]">
+                    <div class="w-24 h-24 bg-indigo-50 rounded-full flex items-center justify-center mb-8 mx-auto text-indigo-200">
+                        <i data-lucide="clipboard-list" class="w-12 h-12"></i>
+                    </div>
+                    <h3 class="text-2xl font-black text-slate-900 mb-2">Workspace Synchronized</h3>
+                    <p class="text-slate-500 max-w-sm mx-auto font-medium">You have no pending objectives at this hierarchy level. Enjoy the operational clarity!</p>
+                </div>`;
+                return;
+            }
+
+            grid.innerHTML = tasks.map((task, i) => `
+                <div class="animate-slide-in-up animation-delay-${i * 50}">
+                     <div class="glass-card border-white/40 h-full hover:shadow-2xl transition-all duration-500 flex flex-col group relative overflow-hidden rounded-[2.5rem] bg-white/60 ${task.priority.toLowerCase() === 'high' ? 'ring-2 ring-red-500/10' : ''}">
+                         <div class="absolute top-0 right-0 w-32 h-32 opacity-[0.03] -mr-8 -mt-8 rounded-full bg-slate-900 group-hover:scale-110 transition-transform duration-700"></div>
+
+                         <div class="p-6 pb-4 relative z-10">
+                            <div class="flex justify-between items-start mb-6">
+                                <div class="bg-slate-900 p-2.5 rounded-xl text-white shadow-xl group-hover:rotate-12 transition-all">
+                                    <i data-lucide="clipboard-list" class="w-6 h-6"></i>
+                                </div>
+                                <span class="${getPriorityColor(task.priority)}border-transparent px-3 py-1 uppercase text-[9px] font-black tracking-widest shadow-lg rounded-full">
+                                    ${task.priority}
+                                </span>
+                            </div>
+                            <h3 class="text-xl font-black text-slate-900 tracking-tight leading-tight group-hover:text-indigo-600 transition-colors min-h-[56px] italic">"${task.title}"</h3>
+                            <div class="mt-2">
+                                ${task.project_title ? `<span class="bg-transparent border border-slate-200 text-slate-400 px-2 py-0.5 rounded-lg text-[9px] font-black uppercase tracking-widest shadow-sm inline-block">${task.project_title}</span>` : ''}
+                            </div>
+                         </div>
+
+                         <div class="flex-1 flex flex-col justify-between pt-0 relative pb-6 px-6 z-10">
+                            <div class="bg-slate-50/50 p-4 rounded-3xl border border-slate-100/50 group-hover:bg-white transition-all duration-500 mb-6">
+                                <p class="text-sm text-slate-600 leading-relaxed font-medium line-clamp-3">
+                                    ${task.description}
+                                </p>
+                            </div>
+
+                            <div class="flex items-center justify-between pt-4 border-t border-slate-50/50">
+                                <div class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest ${new Date(task.due_date) < new Date() && task.status !== 'completed' ? 'text-red-500' : 'text-slate-400'}">
+                                    <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
+                                    <span>Due: ${(new Date(task.due_date)).toLocaleDateString()}</span>
+                                </div>
+                                <span class="capitalize py-1 px-3 rounded-full text-[10px] font-black tracking-widest ${task.status === "completed" ? "bg-emerald-500 text-white" : "bg-white border border-slate-100 text-slate-400"}">
+                                    ${task.status.replace('_', ' ')}
+                                </span>
+                            </div>
+                         </div>
+                     </div>
+                </div>
+            `).join('');
+        }
+
+        loadTasks();
+    </script>
+</body>
+
+</html>

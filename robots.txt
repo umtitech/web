@@ -1,0 +1,37 @@
+# robots.txt for UMTI Tech Solutions
+# Optimized for maximum search engine visibility
+
+User-agent: *
+Allow: /
+
+# Allow all major search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+# Disallow admin and portal pages from indexing
+Disallow: /admin-*
+Disallow: /gateway.html
+Disallow: /student-*
+Disallow: /employee-*
+Disallow: /client-*
+Disallow: /intern-dashboard.html
+Disallow: /attendance.html
+Disallow: /assignments.html
+
+# Sitemap location
+Sitemap: https://umtitech.com/sitemap.xml
+
+# Crawl delay (optional, helps prevent server overload)
+Crawl-delay: 1

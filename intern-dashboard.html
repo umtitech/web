@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intern Dashboard - UMTI Tech</title>
+    <link rel="icon" type="image/png" href="assets/images/umti-20tech-transparent-20-20only-20logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config = { theme: { extend: { fontFamily: { sans: ['Outfit', 'sans-serif'] } } } }</script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="css/portal-styles.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <style>
+        body {
+            background-color: #f8fafc;
+        }
+    </style>
+</head>
+
+<body class="font-sans">
+    <!-- Sidebar -->
+    <aside id="sidebar" class="portal-sidebar">
+        <div class="flex items-center gap-3 mb-8 px-2">
+            <div
+                class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center p-1.5">
+                <img src="assets/images/umti-20tech-transparent-20-20only-20logo.png" alt="UMTI Tech"
+                    class="w-full h-full object-contain">
+            </div>
+            <span class="text-xl font-bold text-slate-900">UMTI<span class="text-indigo-600">Tech</span></span>
+        </div>
+        <nav id="dynamicSidebar" class="space-y-2"></nav>
+        <div class="mt-auto pt-8">
+            <button onclick="handleLogout()" class="portal-nav-link w-full text-red-600 hover:bg-red-50">
+                <i data-lucide="log-out" class="w-5 h-5"></i><span>Logout</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Header -->
+    <header class="portal-header">
+        <button id="mobileMenuBtn" class="lg:hidden p-2 hover:bg-slate-100 rounded-lg">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+        <div class="flex items-center gap-4 ml-auto">
+            <button class="p-2 hover:bg-slate-100 rounded-lg relative">
+                <i data-lucide="bell" class="w-5 h-5"></i>
+                <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+            </button>
+            <div class="flex items-center gap-3">
+                <div
+                    class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white font-bold">
+                    <span id="userInitial">I</span>
+                </div>
+                <div class="hidden sm:block">
+                    <p class="text-sm font-semibold text-slate-900" id="userName">Intern</p>
+                    <p class="text-xs text-slate-500" id="userEmail">intern@umti.com</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="portal-content">
+        <div class="space-y-8 pb-8">
+            <!-- Welcome Section -->
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div class="animate-slide-in-left">
+                    <h1 class="text-3xl md:text-4xl font-bold text-slate-900 mb-2 tracking-tight">
+                        Intern <span class="gradient-text">Program</span>
+                    </h1>
+                    <p class="text-slate-500 font-medium">Your journey to professional excellence starts here.</p>
+                </div>
+                <div class="flex gap-3">
+                    <button
+                        class="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-all shadow-sm font-semibold text-sm">
+                        <i data-lucide="award" class="w-4 h-4 text-indigo-500"></i>Achievements
+                    </button>
+                    <button onclick="contactMentor()"
+                        class="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition-all font-semibold text-sm">
+                        <i data-lucide="user-check" class="w-4 h-4"></i>Contact Mentor
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div id="statsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+
+            <!-- Mentor Card & Content Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                <!-- Mentor Info Card -->
+                <div class="three-d-card text-center animate-scale-in animation-delay-200">
+                    <div
+                        class="w-20 h-20 rounded-full bg-gradient-to-br from-indigo-600 to-purple-600 mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold shadow-xl">
+                        <span id="mentorInitial">M</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-1" id="mentorName">Loading...</h3>
+                    <p class="text-sm text-slate-500 font-medium mb-4">Your Mentor</p>
+                    <div class="space-y-3">
+                        <div class="p-3 bg-slate-50 rounded-xl">
+                            <p class="text-xs text-slate-500 uppercase font-bold tracking-wider mb-1">Program Progress
+                            </p>
+                            <div id="mentorProgress"></div>
+                        </div>
+                        <button onclick="contactMentor()"
+                            class="w-full py-2 px-4 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-all font-semibold text-sm shadow-md hover:shadow-lg">
+                            <i data-lucide="message-circle" class="w-4 h-4 inline mr-2"></i>Message
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Training Courses -->
+                <div class="lg:col-span-3 chart-card animate-slide-in-up animation-delay-300">
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">Training Programs</h3>
+                    <p class="text-sm text-slate-500 mb-6">Your onboarding and skill development tracks</p>
+                    <div id="coursesList" class="grid gap-4 max-h-[400px] overflow-y-auto custom-scrollbar pr-2"></div>
+                </div>
+            </div>
+
+            <!-- Tasks Section -->
+            <div class="chart-card animate-slide-in-up animation-delay-400">
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-900">Assigned Tasks</h3>
+                        <p class="text-sm text-slate-500">Complete these to progress in your internship</p>
+                    </div>
+                    <button
+                        class="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-all shadow-sm font-semibold text-sm">
+                        <i data-lucide="filter" class="w-4 h-4"></i>
+                        Filter
+                    </button>
+                </div>
+                <div id="tasksList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/utils/auth.js"></script>
+    <script src="js/utils/portal-api.js"></script>
+    <script src="js/components/circular-progress.js"></script>
+    <script src="js/components/portal-layout.js"></script>
+    <script>
+        Auth.protectPage('intern');
+        let dashboardData = null;
+
+        async function loadDashboard() {
+            try {
+                dashboardData = await fetchDashboardData('intern');
+                renderStats();
+                renderMentor();
+                renderCourses();
+                renderTasks();
+                lucide.createIcons();
+            } catch (error) {
+                console.error("Failed to load intern dashboard:", error);
+            }
+        }
+
+        function renderStats() {
+            const stats = [
+                { title: 'Active Courses', value: dashboardData.enrolled_courses, change: '+1', icon: 'book-open', gradient: 'from-blue-500 to-cyan-500' },
+                { title: 'Tasks Done', value: dashboardData.completed_tasks, change: '+8', icon: 'check-circle', gradient: 'from-green-500 to-emerald-500' },
+                { title: 'In Progress', value: dashboardData.in_progress_tasks, change: '0', icon: 'clock', gradient: 'from-orange-500 to-red-500' },
+                { title: 'Avg Score', value: `${dashboardData.avg_score}%`, change: '+4%', icon: 'trending-up', gradient: 'from-purple-500 to-pink-500' }
+            ];
+
+            document.getElementById('statsGrid').innerHTML = stats.map((stat, i) => `
+                <div class="stat-card animate-slide-in-up animation-delay-${i * 100}" style="--gradient-from: #6366f1; --gradient-to: #a855f7; --shadow-color: 99, 102, 241;">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="stat-icon-container">
+                            <i data-lucide="${stat.icon}" class="w-6 h-6 text-white"></i>
+                        </div>
+                        <span class="text-xs font-bold ${stat.change.startsWith('+') ? 'text-green-600 bg-green-50' : 'text-slate-600 bg-slate-50'} px-2 py-1 rounded-full">${stat.change}</span>
+                    </div>
+                    <h3 class="text-sm font-medium text-slate-600 mb-1">${stat.title}</h3>
+                    <p class="text-3xl font-bold text-slate-900">${stat.value}</p>
+                </div>
+            `).join('');
+        }
+
+        function renderMentor() {
+            const mentor = dashboardData.mentor || 'Sarah Johnson';
+            document.getElementById('mentorName').textContent = mentor;
+            document.getElementById('mentorInitial').textContent = mentor.charAt(0);
+
+            const completionRate = dashboardData.enrolled_courses ? Math.round((dashboardData.completed_tasks / (dashboardData.completed_tasks + dashboardData.in_progress_tasks)) * 100) : 0;
+            createCircularProgress('mentorProgress', completionRate, { size: 80, strokeWidth: 8, color: '#6366f1', trackColor: 'rgba(99,102,241,0.1)' });
+        }
+
+        function renderCourses() {
+            document.getElementById('coursesList').innerHTML = dashboardData.courses.map((course, i) => `
+                <div class="p-5 rounded-3xl hover:bg-slate-50 transition-all space-y-3 border border-slate-100/50 hover:border-indigo-100 hover:shadow-xl group cursor-pointer bg-white animate-slide-in-left animation-delay-${i * 100}">
+                    <div class="flex justify-between items-start">
+                        <div class="flex items-start gap-3">
+                            <div class="w-12 h-12 rounded-xl bg-indigo-100 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform shadow-sm">
+                                <i data-lucide="book-open" class="w-6 h-6 text-indigo-600"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-slate-900 mb-1 group-hover:text-indigo-600 transition-colors">${course.name}</h3>
+                                <p class="text-sm text-slate-500 font-medium">by ${course.instructor}</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-2xl font-bold text-slate-900">${course.progress}%</span>
+                            <p class="text-[10px] font-bold uppercase tracking-wider ${course.progress === 100 ? 'text-green-500' : 'text-indigo-500'}">
+                                ${course.progress === 100 ? 'Done' : 'Active'}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" style="width: ${course.progress}%"></div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderTasks() {
+            document.getElementById('tasksList').innerHTML = dashboardData.tasks.map((task, i) => `
+                <div class="p-5 rounded-2xl border-2 ${task.status === 'completed' ? 'border-green-200 bg-green-50/30' : 'border-slate-100 bg-white'} hover:border-indigo-200 hover:shadow-lg transition-all group cursor-pointer animate-slide-in-up animation-delay-${(i + 2) * 100}">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="w-10 h-10 rounded-xl ${task.status === 'completed' ? 'bg-green-500 text-white' : 'bg-indigo-100 text-indigo-600'} flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm">
+                            <i data-lucide="${task.status === 'completed' ? 'check-circle' : 'clipboard-list'}" class="w-5 h-5"></i>
+                        </div>
+                        <span class="badge badge-${task.status === 'completed' ? 'success' : task.status === 'in_progress' ? 'info' : 'warning'} text-[10px] px-2 py-0.5">
+                            ${task.status.replace('_', ' ')}
+                        </span>
+                    </div>
+                    <h3 class="font-bold text-slate-900 mb-2 group-hover:text-indigo-600 transition-colors">${task.title}</h3>
+                    <p class="text-xs text-slate-500 font-medium flex items-center gap-1">
+                        <i data-lucide="calendar" class="w-3 h-3"></i>
+                        Due: ${task.due_date}
+                    </p>
+                </div>
+            `).join('');
+        }
+
+        function contactMentor() {
+            alert(`Contact your mentor: ${dashboardData?.mentor || 'Sarah Johnson'}`);
+        }
+
+        function handleLogout() {
+            Auth.logout();
+        }
+
+        loadDashboard();
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>
