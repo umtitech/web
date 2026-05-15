@@ -929,7 +929,7 @@ At UMTI Tech Solutions, we stay at the forefront of these trends, ensuring our c
             fullContent: `Decisions based on gut feeling are a thing of the past. In 2026, predictive analytics allows businesses to see around corners and anticipate market shifts before they happen.<br><br>
             <strong>Turning Data into Gold</strong><br><br>
             By synthesizing vast amounts of customer data, businesses can predict churn, optimize pricing in real-time, and target marketing spend with pinpoint accuracy, leading to massive improvements in ROI.`,
-            author: "Kanwal Aftab",
+            author: "Altaf Malkani",
             date: "December 28, 2025",
             readTime: "8 min read",
             category: "AI Solutions",
@@ -1007,7 +1007,7 @@ At UMTI Tech Solutions, we stay at the forefront of these trends, ensuring our c
             fullContent: `While general-purpose AI is impressive, niche business applications require specialized knowledge. Fine-tuning models on your own proprietary data is the key to unlocking true AI value for your enterprise.<br><br>
             <strong>Expertise as a Service</strong><br><br>
             Whether it's legal, medical, or highly technical engineering domains, a fine-tuned LLM can provide insights and assistance that far surpass general models, making it an indispensable tool for your expert teams.`,
-            author: "Kanwal Aftab",
+            author: "Muhammad Saqib Qureshi",
             date: "December 08, 2025",
             readTime: "9 min read",
             category: "AI Research",
@@ -1085,7 +1085,7 @@ At UMTI Tech Solutions, we stay at the forefront of these trends, ensuring our c
             fullContent: `Computer vision is becoming a critical tool in modern medicine. By analyzing X-rays, MRIs, and CT scans, AI systems can spot anomalies that human eyes might miss, leading to earlier detection and better patient outcomes.<br><br>
             <strong>Augmenting Human Expertise</strong><br><br>
             AI isn't here to replace doctors; it's here to give them superpowers. By handling the initial screening and highlighting areas of concern, AI allows medical professionals to focus their expertise where it's needed most.`,
-            author: "Kanwal Aftab",
+            author: "Altaf Malkani",
             date: "November 18, 2025",
             readTime: "9 min read",
             category: "AI Solutions",
@@ -1322,12 +1322,7 @@ At UMTI Tech Solutions, we stay at the forefront of these trends, ensuring our c
             bio: "Experienced project manager ensuring timely and efficient delivery of complex technical projects.",
             image: "assets/images/habib.png"
         },
-        {
-            name: "Kanwal Aftab",
-            role: "Lead AI Researcher",
-            bio: "Pioneering our AI initiatives with cutting-edge research in machine learning and neural networks.",
-            image: "assets/images/sophia-white.png"
-        },
+
         {
             name: "Misha",
             role: "Web Developer",
@@ -1513,8 +1508,12 @@ At UMTI Tech Solutions, we stay at the forefront of these trends, ensuring our c
                     <p class="text-blue-600 font-semibold mb-4">${member.role}</p>
                     <p class="text-gray-600 text-sm leading-relaxed mb-6">${member.bio}</p>
                     <div class="flex justify-center gap-3">
-                        <a href="#" class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center hover:bg-blue-600 hover:text-white transition-colors"><i data-lucide="linkedin" class="w-4 h-4"></i></a>
-                        <a href="#" class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center hover:bg-blue-600 hover:text-white transition-colors"><i data-lucide="twitter" class="w-4 h-4"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center hover:bg-blue-600 hover:text-white transition-colors group" aria-label="LinkedIn">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-600 group-hover:text-white transition-colors" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center hover:bg-blue-600 hover:text-white transition-colors group" aria-label="X (Twitter)">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-600 group-hover:text-white transition-colors" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                        </a>
                     </div>
                 </div>
             </div>
